@@ -1,0 +1,29 @@
+POST {{host}}/api/v1/utils/genre
+Content-Type: application/json
+
+{
+  "name": "Adventure"
+}
+
+###
+PUT {{host}}/api/v1/utils/category/618f887e9eae23e89d729ffd
+Content-Type: application/json
+
+{
+  "categoryName": "Drama"
+}
+
+###
+POST {{host}}/api/v1/utils/category
+Content-Type: application/json
+
+{
+  "categoryName": "Drama",
+  "divisionName": "{{divisionName}}"
+}
+
+###
+GET http://localhost:8080/api/v1/utils/category
+Accept: application/json
+
+###

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genres</title>
+    <style>
+        body{
+            background-color: aliceblue;
+            width: 100%;
+            height: 100%;
+            align-content: center;
+            text-align: center;
+        }
+        .container{
+            width: 100%;
+            display: flex;
+        }
+        .card{
+            width: 50%;
+            background-color: whitesmoke;
+            margin: 16px;
+            padding: 24px;
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.4);
+            border-radius: 16px;
+        }
+        form input {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<h1>Genre Page</h1>
+<div class="container">
+    <div class="card">
+        <h3>
+            Add Genre
+        </h3>
+        <form method="post" action="/api/v1/utils/genre">
+            <p><b>Name:</b> <input type="text" name="name"></p>
+            <p><input type="submit" value="Add"></p>
+        </form>
+    </div>
+    <div class="card">
+        <h3>
+            All Genre
+        </h3>
+    </div>
+</div>
+
+
+
+</body>
+</html>
