@@ -42,6 +42,7 @@ exports.register = async (req, res) => {
 
 };
 exports.login = async (req, res) => {
+
     const password = req.body.password;
     //checking if email exists
     const user = await User.findOne({email: req.body.email});
@@ -65,8 +66,29 @@ exports.logout = (req, res) => {
     res.status(200).send("Logged out...!");
 }
 
+exports.loginUser = async (email, password) => {
+    //checking if email exists
+    const user = await User.findOne({email: email});
+    if (!user) {
+        //callback(new Error(404, "email not found"));
+        return new Error(404, "email not found");
+    }
+    const validPass = await bcrypt.compare(password, user.password);
+    if (validPass) {
+
+        //create and assign token
+        const token = jwt.sign({id: user._id}, process.env.JWT_KEY, {expiresIn: 60});
+        //callback();
+        return new Success(200, "Logged In Successfully", token)
+    }
+    //callback(new Error(400,"password didn't match"));
+    return new Error(400,"password didn't match");
+}
+
 const hashPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-    return hash;
+    return await bcrypt.hash(password, salt);
 }
+exports.hashPassword = hashPassword;
+
+

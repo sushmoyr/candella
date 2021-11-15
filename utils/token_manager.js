@@ -5,11 +5,15 @@ const blockToken = (token)=>{
     blackListTokens.push(token);
 }
 
+const isTokenBlocked = (token) => {
+    return blackListTokens.includes(token);
+}
+
 
 const verifyToken = async (req, res, next) => {
     const token = req.headers.token;
 
-    if(token && !blackListTokens.includes(token)){
+    if(token && !isTokenBlocked(token)){
         jwt.verify(token, process.env.JWT_KEY, {}, (err, user)=> {
             if(err){
                 return res.status(401).json({
@@ -35,4 +39,4 @@ const destroyToken = (req, res, next)=>{
 
 }
 
-module.exports = {verifyToken, blockToken};
+module.exports = {verifyToken, blockToken, isTokenBlocked};
