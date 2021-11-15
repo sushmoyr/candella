@@ -7,8 +7,8 @@
     "node": "12.x"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "startm": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
