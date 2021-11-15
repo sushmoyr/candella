@@ -38,6 +38,6 @@ app.use('/api/v1/utils', routes.utilsRoutes);
 app.use(userViewRoute);
 
 
-app.listen(8080, () => {
+app.listen(process.env.PORT, () => {
     console.log("Server is running");
 })
