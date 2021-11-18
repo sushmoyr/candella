@@ -3,36 +3,26 @@ const {comicChapter} = require("./chapter");
 const rating = require("./rating");
 const thoughts = require("./thoughts");
 
-const comicSchema = new Schema({
+const photoSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId
     },
     title: {
         type: String,
-        required: true
     },
-    alternateNames: {
-        type: [String]
-    },
-    description: {
+    caption: {
         type: String
     },
-    coverImage: {
+    image: {
         type: String
     },
     division: {
         type: String,
-        default: "Comic"
+        default: "Photography"
     },
     genre: {
         type: Schema.Types.ObjectId,
         required: true
-    },
-    lang: {
-        type: String,
-    },
-    chapters: {
-        type: [comicChapter]
     },
     ratings: {
         type: [rating]
@@ -43,14 +33,13 @@ const comicSchema = new Schema({
     tags: {
         type: [String]
     }
+});
 
-
-}, {timestamps: true});
-comicSchema.virtual('thoughtsCount').get(function (){
+photoSchema.virtual('thoughtsCount').get(function (){
     return this.thoughts.length;
 });
 
-comicSchema.virtual('totalRating').get(function (){
+photoSchema.virtual('totalRating').get(function (){
     const ratings = this.ratings;
     const n = ratings.length;
     let sum = 0;
@@ -61,9 +50,4 @@ comicSchema.virtual('totalRating').get(function (){
     return isNaN(rating)?0:rating;
 });
 
-comicSchema.virtual('chapterCount').get(function (){
-    const chapters = this.chapters;
-    return (chapters)?chapters.length:0;
-});
-
-module.exports = model('Comics', comicSchema);
+module.exports = model('Photography', photoSchema);

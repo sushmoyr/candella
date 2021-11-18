@@ -10,7 +10,11 @@ router.post('/', verifyToken, contentController.create);
 
 router.get('/', contentController.readMix);
 
-router.get('/:division', contentController.readDiv)
+router.get('/d/:division', contentController.readDiv);
+
+router.get('/d/:division/:id', contentController.readByDivId);
+
+router.get('/i/content/:id', contentController.readById);
 
 
 module.exports = router;

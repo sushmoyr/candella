@@ -1,4 +1,11 @@
-GET http://localhost:8080/api/v1/c?excludes=author_thoughts_ratings
+GET http://localhost:8080/api/v1/c/d/literature/619624fe78c932aa105028f4
+Accept: application/json
+
+###
+GET http://localhost:8080/api/v1/c/d/journal/6196a05b05b7e71563ec47f8
+
+###
+GET http://localhost:8080/api/v1/c/d/journal?excludes=tags_lang_ratings_thoughts_author
 Accept: application/json
 
 ###
@@ -38,11 +45,11 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3
 
 POST http://localhost:8080/api/v1/c
 Content-Type: application/json
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3OTgwYiIsImlhdCI6MTYzNzE3MzU2NiwiZXhwIjoxNjM3MjU5OTY2fQ.6DdO6ZYAXJoZHlVYoNooOfQrlkCb7QlMwV4JhQVXpBw
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3OTgwYiIsImlhdCI6MTYzNzI2MTMyOSwiZXhwIjoxNjM3MzQ3NzI5fQ.UDZ6qkacUSC9w40nXSBxdStFbjK-eZAb5IUIHn50Yl8
 
 {
-  "title": "My Journal #2",
-  "desc": "My desc",
+  "title": "A brief history of mankind",
+  "desc": "Here we will discuss the history of mankind",
   "division": "journal",
   "genre": "61957b38997800bdff0f7824",
   "thoughts": [
@@ -58,7 +65,7 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3
     },
     {
       "by": "61913734f24ceeb085e48bcf",
-      "value": 2
+      "value": 4
     }
   ]
 }

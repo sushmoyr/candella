@@ -2,8 +2,11 @@ const Error = require('../models/utils/error');
 const Success = require('../models/utils/success');
 const Literature = require('../models/data/literature');
 const Journal = require('../models/data/journal');
+const Comic = require('../models/data/comics');
+const Photography = require('../models/data/');
 const MixedContents = require('../models/data/mixedContents');
 const {Divisions} = require('../utils/Constants');
+const {pagination, normalizePost, validateLitData, validateJournal, excludeFields, validateComic} = require("../utils/helpers");
 //get all mixed
 exports.readMix = async (req, res) => {
     let result;
@@ -13,75 +16,36 @@ exports.readMix = async (req, res) => {
     } catch (e) {
         res.status(500).json(e);
     }
-    /*await getMixed(req).then(data => {
-        normalizeMix(req, data);
-        res.status(200).json(data);
-    }).catch(e => {
-        res.status(500).json(e);
-    });*/
 }
 
 exports.readDiv = async (req, res) => {
     const division = req.params.division;
-    const {sortBy, order, limit, skip} = pagination(req);
     let result;
     try {
         if (division === Divisions.literature) {
             result = await getLiteratures(req);
-            //result = normalizePost(req, result);
-            //result = normalizePost(req, result);
         } else if (division === Divisions.journal) {
-            result = await Journal.find().sort([[sortBy, order]]).skip(skip).limit(limit);
+            result = await getJournals(req);
+        } else if (division === Divisions.comic) {
+            result = await getComics(req);
+        } else if (division === Divisions.comic) {
+
+        } else {
+            return res.status(401).json(new Error(401, 'No or Invalid Division set'));
         }
         //console.log(result);
+        if (result instanceof Error)
+            return res.status(result.code).json(result);
+
+        if (req.query['excludes']) {
+            console.log('excludes = ' + req.query['excludes']);
+            result = normalizePost(req.query['excludes'], result);
+        }
         res.status(200).json(result);
     } catch (e) {
         console.log(e);
-        res.send(e);
+        res.status(500).json(new Error(500, e));
     }
-}
-
-const normalizePost = (req, posts) =>{
-    const excludes = req.query['excludes'];
-    const fields = excludes.split('_');
-    //excludes.push('_id');
-    let obj = {};
-    const normalized = [];
-
-    console.log(fields);
-    posts.forEach((post) => {
-        const {_doc} = post;
-        console.log(post.totalRating);
-        const keys = Object.keys(_doc);
-        keys.forEach(s => {
-            console.log(s);
-            if(!excludes.includes(s)){
-                obj[s] = _doc[s];
-            }
-        });
-        if(post.totalRating)
-            obj['totalRating'] = post.totalRating;
-        if(post.thoughtsCount)
-            obj['thoughtsCount'] = post.thoughtsCount;
-        if(post.chapterCount)
-            obj['chapterCount'] = post.chapterCount;
-        console.log(obj);
-        normalized.push(obj);
-    })
-    return normalized;
-    /*const excludes = req.query['excludes'];
-    const fields = excludes.split('_');
-    console.log(fields);
-    const normalizePosts = [];
-    posts.forEach((post) => {
-        let {_doc} = post;
-        fields.forEach(field => {
-            delete _doc[field];
-        });
-        normalizePosts.push(_doc);
-    });*/
-
-    //return normalizePosts;
 }
 
 const normalizeMix = (req, mixes) => {
@@ -96,7 +60,7 @@ const normalizeMix = (req, mixes) => {
         console.log(data);
 
         data['thoughts'] = undefined;
-        console.log('Deleted: ' );
+        console.log('Deleted: ');
 
         console.log(data)
 
@@ -133,18 +97,12 @@ const getMixed = async (req) => {
     }
 }
 
-
-const pagination = (req) => {
-    const pageNo = (req.query['page']) ? req.query['page'] : 1;
-    const sortBy = (req.query['sort_by']) ? req.query['sort_by'] : 'createdAt';
-    const order = (req.query['order']) ? req.query['order'] : 'asc';
-    const limit = process.env.page_limit * 1;
-    const skip = (pageNo - 1) * limit;
-    return {skip, limit, pageNo, sortBy, order};
-}
-
-
-//Creates a mew content object. Method: Post
+/**
+ * Creates a mew content object. Method: Post
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.create = async (req, res) => {
     const division = req.body.division.toLowerCase();
 
@@ -169,12 +127,61 @@ exports.create = async (req, res) => {
                 console.log(err);
                 res.status(err.code).json(err);
             });
+    } else if (division === Divisions.comic) {
+        await uploadComic(req.user.id, req.body)
+            .then((result) => {
+                console.log(result);
+                res.status(result.code).json(result);
+            }).catch(err => {
+                console.log(err);
+                res.status(err.code).json(err);
+            });
     }
 
 }
 
+exports.readByDivId = async (req, res) => {
+    //TODO search post from division collections
+    const {division, id} = req.params;
+    let result;
+    try {
+        if (division === Divisions.literature) {
+            result = await getSingleLiterature(id);
+        } else if (division === Divisions.journal) {
+            result = await getSingleJournal(id);
+        } else if (division === Divisions.comic) {
+            result = await getSingleComic(id);
+        } else if (division === Divisions.comic) {
+
+        } else {
+            return res.status(401).json(new Error(401, 'No or Invalid Division set'));
+        }
+
+        if (result instanceof Error)
+            return res.status(result.code).json(result);
+
+        if (req.query['excludes']) {
+            console.log('excludes = ' + req.query['excludes']);
+            result = excludeFields(req.query['excludes'], result);
+        }
+
+        res.status(200).json(result);
+    } catch (e) {
+        console.log(e);
+        res.status(500).json(new Error(500, e));
+    }
+}
+
+exports.readById = async (req, res) => {
+    //TODO search post from mix collection
+}
+
+/**
+ * Literature Block for literature type
+ * post's crud operations
+ */
+
 const uploadLiterature = async (id, post) => {
-    ///console.log({id, ...post});
     const validate = validateLitData(post);
 
     if (validate instanceof Error)
@@ -198,25 +205,55 @@ const getLiteratures = async (req) => {
             .select('-__v')
             .skip(skip).limit(limit)
             .sort([[sortBy, order]])
-            .populate([{
-                path: 'author',
-                select: "_id name email pen_name"
-            }, {
-                path: 'genre',
-                select: "-_id -__v"
-            }, {
-                path: 'thoughts.by',
-                select: "name _id"
-            }, {
-                path: 'ratings.by',
-                select: "name _id"
-            }
+            .populate([
+                {
+                    path: 'author',
+                    select: "_id name email pen_name"
+                }, {
+                    path: 'genre',
+                    select: "-_id -__v"
+                }
             ]);
     } catch (e) {
         console.log('lit ' + e);
         return e;
     }
 }
+
+const getSingleLiterature = async (id) => {
+    try {
+        return await Literature.findById(id)
+            .populate([
+                {
+                    path: 'author',
+                    select: "_id name email pen_name"
+                },
+                {
+                    path: 'genre',
+                    select: "-_id -__v"
+                },
+                {
+                    path: 'thoughts.by',
+                    select: "_id name profileImage"
+                },
+                {
+                    path: 'ratings.by',
+                    select: "_id name profileImage"
+                },
+            ]);
+    } catch (e) {
+        console.log(e);
+        res.status(500)
+            .json(new Error(500, e));
+    }
+}
+
+
+
+/**
+ * Journal Block for journal type
+ * post's crud operations
+ */
 
 const uploadJournal = async (id, data) => {
     const validate = validateJournal(data);
@@ -233,58 +270,207 @@ const uploadJournal = async (id, data) => {
     } catch (err) {
         return new Error(500, `${err}`);
     }
-}
+};
 
-const validateLitData = post => {
-    const {title, division, category, genre} = post;
+const getJournals = async (req) => {
+    const {skip, limit, sortBy, order} = pagination(req);
+    try {
+        return await Journal.find()
+            .select('-__v')
+            .skip(skip).limit(limit)
+            .sort([[sortBy, order]])
+            .populate([
+                {
+                    path: 'author',
+                    select: '_id name email pen_name'
+                },
+                {
+                    path: 'genre',
+                    select: 'name'
+                }
+            ])
+    } catch (e) {
+        console.log('journal ' + e);
+        return new Error(500, e);
+    }
 
-    let message;
-    let error;
-    const fields = [];
-    if (!title) {
-        fields.push('title');
-    }
-    if (!division) {
-        fields.push('division');
-    }
-    if (!category) {
-        fields.push('category');
-    }
-    if (!genre) {
-        fields.push('genre');
-    }
-    if (fields.length > 0) {
-        message = fields[0];
-        for (let i = 1; i < fields.length; i++) {
-            message += `, ${fields[i]}`;
-        }
-        message += ' not found.'
-        return new Error(404, message);
-    }
-    return new Success(200);
 
 };
 
-const validateJournal = post => {
-    const {title, genre} = post;
+const getSingleJournal = async (id) => {
+    try {
+        return await Journal.findById(id)
+            .populate([
+                {
+                    path: 'author',
+                    select: "_id name email pen_name"
+                },
+                {
+                    path: 'genre',
+                    select: "-_id -__v"
+                },
+                {
+                    path: 'thoughts.by',
+                    select: "_id name profileImage"
+                },
+                {
+                    path: 'ratings.by',
+                    select: "_id name profileImage"
+                },
+            ]);
+    } catch (e) {
+        console.log(e);
+        res.status(500)
+            .json(new Error(500, e));
+    }
+};
 
-    let message;
-    const fields = [];
-    if (!title) {
-        fields.push('title');
+/**
+ * Comic Block for comic type
+ * post's crud operations
+ */
+
+const uploadComic = async (id, post) => {
+    const validate = validateComic(post);
+
+    if (validate instanceof Error)
+        return validate;
+
+    try {
+        const comic = new Comic({author: id, ...post});
+        const newComic = await comic.save();
+        console.log(newComic);
+        await mix(newComic);
+        return new Success(201, "Created Successfully", newComic);
+    } catch (err) {
+        return new Error(500, `${err}`);
     }
-    if (!genre) {
-        fields.push('genre');
+};
+
+const getComics = async (req) => {
+    const {skip, limit, sortBy, order} = pagination(req);
+    try {
+        return await Comic.find()
+            .select('-__v')
+            .skip(skip).limit(limit)
+            .sort([[sortBy, order]])
+            .populate([
+                {
+                    path: 'author',
+                    select: '_id name email pen_name'
+                },
+                {
+                    path: 'genre',
+                    select: 'name'
+                }
+            ])
+    } catch (e) {
+        console.log('comic ' + e);
+        return new Error(500, e);
     }
-    if (fields.length > 0) {
-        message = fields[0];
-        for (let i = 1; i < fields.length; i++) {
-            message += `, ${fields[i]}`;
-        }
-        message += ' not found.'
-        return new Error(404, message);
+
+};
+
+const getSingleComic = async (id) => {
+    try {
+        return await Comic.findById(id)
+            .populate([
+                {
+                    path: 'author',
+                    select: "_id name email pen_name"
+                },
+                {
+                    path: 'genre',
+                    select: "-_id -__v"
+                },
+                {
+                    path: 'thoughts.by',
+                    select: "_id name profileImage"
+                },
+                {
+                    path: 'ratings.by',
+                    select: "_id name profileImage"
+                },
+            ]);
+    } catch (e) {
+        console.log(e);
+        res.status(500)
+            .json(new Error(500, e));
     }
-    return new Success(200);
+}
+
+/**
+ * Photography Block for photography type
+ * post's crud operations
+ */
+
+const uploadPhotographyPost = async (id, post) => {
+    const validate = validateComic(post);
+
+    if (validate instanceof Error)
+        return validate;
+
+    try {
+        const comic = new Comic({author: id, ...post});
+        const newComic = await comic.save();
+        console.log(newComic);
+        await mix(newComic);
+        return new Success(201, "Created Successfully", newComic);
+    } catch (err) {
+        return new Error(500, `${err}`);
+    }
+};
+
+const getPhotographyPosts = async (req) => {
+    const {skip, limit, sortBy, order} = pagination(req);
+    try {
+        return await Comic.find()
+            .select('-__v')
+            .skip(skip).limit(limit)
+            .sort([[sortBy, order]])
+            .populate([
+                {
+                    path: 'author',
+                    select: '_id name email pen_name'
+                },
+                {
+                    path: 'genre',
+                    select: 'name'
+                }
+            ])
+    } catch (e) {
+        console.log('comic ' + e);
+        return new Error(500, e);
+    }
+
+};
+
+const getSinglePhotographyPost = async (id) => {
+    try {
+        return await Comic.findById(id)
+            .populate([
+                {
+                    path: 'author',
+                    select: "_id name email pen_name"
+                },
+                {
+                    path: 'genre',
+                    select: "-_id -__v"
+                },
+                {
+                    path: 'thoughts.by',
+                    select: "_id name profileImage"
+                },
+                {
+                    path: 'ratings.by',
+                    select: "_id name profileImage"
+                },
+            ]);
+    } catch (e) {
+        console.log(e);
+        res.status(500)
+            .json(new Error(500, e));
+    }
 }
 
 

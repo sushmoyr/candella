@@ -1,0 +1,47 @@
+GET http://localhost:8080/api/v1/c/d/comic/6196b6ed3ca091321281f1a9?excludes=tags_lang_ratings_thoughts_author
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/v1/c/d/comic?excludes=tags_lang_ratings_thoughts_author
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/v1/c/d/comic
+Accept: application/json
+
+###
+
+POST http://localhost:8080/api/v1/c
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3OTgwYiIsImlhdCI6MTYzNzI2NzE1MCwiZXhwIjoxNjM3MzUzNTUwfQ.1WIg0Uz54dTzJI4vM218LnqeE46vezaV3OrHZZKrvZE
+
+{
+  "title": "Tomb Raider",
+  "description": "My desc",
+  "division": "comic",
+  "genre": "61957b15997800bdff0f7822",
+  "thoughts": [
+    {
+      "by": "619137689743cdae07816e7f",
+      "value": "Can be better."
+    },
+    {
+      "by": "61913734f24ceeb085e48bcf",
+      "value": "Nice one."
+    }
+  ],
+  "ratings" : [
+    {
+      "by": "619137689743cdae07816e7f",
+      "value": 3
+    },
+    {
+      "by": "61913734f24ceeb085e48bcf",
+      "value": 4
+    }
+  ]
+}
+
+###
