@@ -1,12 +1,13 @@
 const {Schema, model} = require('mongoose');
-const {textChapter} = require('chapter');
-const rating = require('rating');
-const thoughts = require('thoughts');
-const category = require('category');
+const {textChapter} = require('./chapter');
+const rating = require('./rating');
+const thoughts = require('./thoughts');
+const {Divisions} = require('../../utils/Constants');
 
 const literatureSchema = new Schema({
     author: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     title: {
         type: String,
@@ -23,16 +24,21 @@ const literatureSchema = new Schema({
     },
     division: {
         type: String,
-        default: "Literature"
+        required: true,
+        default: Divisions.literature
     },
     category: {
-        type: category
+        type: String,
+        required: true
     },
     genre: {
-       type: Schema.Types.ObjectId
+       type: Schema.Types.ObjectId,
+        required: true,
+        ref: "genre"
     },
     lang: {
         type: String,
+        default: 'bn'
     },
     chapters: {
         type: [textChapter]
@@ -41,11 +47,42 @@ const literatureSchema = new Schema({
         type: [rating]
     },
     thoughts: {
-        type: [thoughts]
+        type: [thoughts],
     },
     tags: {
         type: [String]
+    },
+    views: {
+        type: Number
     }
-}, {timestamps: true});
+}, {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
 
-module.exports = model('Literature', literatureSchema);
+literatureSchema.virtual('thoughtsCount').get(function (){
+    const thoughts = this.thoughts;
+    return (thoughts)?thoughts.length:0;
+});
+
+
+literatureSchema.virtual('chapterCount').get(function (){
+    const chapters = this.chapters;
+    return (chapters)?chapters.length:0;
+});
+
+
+literatureSchema.virtual('totalRating').get(function (){
+    const ratings = this.ratings;
+    const n = ratings.length;
+    let sum = 0;
+    for (const rating of ratings) {
+        sum += rating.value;
+    }
+    const rating = sum / n;
+    return isNaN(rating)?0:rating;
+});
+
+
+module.exports = model(Divisions.literature, literatureSchema);

@@ -6,4 +6,4 @@ const genreSchema = new Schema({
     }
 });
 
-module.exports = model('Genres', genreSchema);
+module.exports = model('genre', genreSchema);

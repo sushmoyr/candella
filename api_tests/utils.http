@@ -2,7 +2,7 @@ POST {{host}}/api/v1/utils/genre
 Content-Type: application/json
 
 {
-  "name": "Adventure"
+  "name": "Science"
 }
 
 ###

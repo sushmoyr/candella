@@ -1,6 +1,6 @@
 const {Schema} = require('mongoose');
 
-const textChapter = new Schema({
+exports.textChapter = new Schema({
     name: {
         type: String
     },
@@ -9,7 +9,7 @@ const textChapter = new Schema({
     }
 }, {timestamps: true});
 
-const comicChapter = new Schema({
+exports.comicChapter = new Schema({
     name: {
         type: String
     },
@@ -20,5 +20,3 @@ const comicChapter = new Schema({
 
 
 
-
-module.exports = {textChapter, comicChapter}

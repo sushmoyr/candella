@@ -2,10 +2,11 @@ const {Schema} = require('mongoose');
 
 const thoughtSchema = new Schema({
     by: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
     value: {
-        type: Schema.Types.String,
+        type: String,
         maxlength: 200
     }
 }, {timestamps: true});

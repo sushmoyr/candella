@@ -2,7 +2,8 @@ const {Schema} = require('mongoose');
 
 const ratingSchema = new Schema({
     by: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     value: {
         type: Schema.Types.Number,

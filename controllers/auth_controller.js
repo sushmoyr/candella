@@ -53,7 +53,7 @@ exports.login = async (req, res) => {
     if (validPass) {
 
         //create and assign token
-        const token = jwt.sign({id: user._id}, process.env.JWT_KEY, {expiresIn: 60});
+        const token = jwt.sign({id: user._id}, process.env.JWT_KEY, {expiresIn: '1d'});
 
         return res.header('auth-token', token)
             .status(200).json(new Success(200, "Logged In Successfully", token));

@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
                 console.log("user is ", user);
                 req.user = user;
                 res.user = user;
-                res.render('welcome');
+                res.render('home');
             }
 
         });
