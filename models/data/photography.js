@@ -2,6 +2,7 @@ const {Schema, model} = require('mongoose');
 const {comicChapter} = require("./chapter");
 const rating = require("./rating");
 const thoughts = require("./thoughts");
+const {Divisions} = require("../../utils/Constants");
 
 const photoSchema = new Schema({
     author: {
@@ -50,4 +51,4 @@ photoSchema.virtual('totalRating').get(function (){
     return isNaN(rating)?0:rating;
 });
 
-module.exports = model('Photography', photoSchema);
+module.exports = model(Divisions.photography, photoSchema);

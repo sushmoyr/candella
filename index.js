@@ -7,6 +7,7 @@ const cookie_parser = require('cookie-parser');
 //local modules import
 const routes = require('./routes/routes');
 const userViewRoute = require('./view_routes/user_route')
+const postRouter = require('./view_routes/post_routes')
 const path = require("path");
 let cors = require('cors');
 
@@ -31,7 +32,7 @@ mongoose.connect(process.env.DB_URL)
 
 
 //middlewares
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookie_parser('1234'));
@@ -48,6 +49,7 @@ app.use('/api/v1/c', routes.postRoutes);
 
 //view routes
 app.use(userViewRoute);
+app.use('/content', postRouter);
 
 
 app.listen(process.env.PORT, () => {

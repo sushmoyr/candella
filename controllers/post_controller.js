@@ -3,12 +3,12 @@ const Success = require('../models/utils/success');
 const Literature = require('../models/data/literature');
 const Journal = require('../models/data/journal');
 const Comic = require('../models/data/comics');
-const Photography = require('../models/data/');
+const Photography = require('../models/data/photography');
 const MixedContents = require('../models/data/mixedContents');
 const {Divisions} = require('../utils/Constants');
 const {pagination, normalizePost, validateLitData, validateJournal, excludeFields, validateComic} = require("../utils/helpers");
 //get all mixed
-exports.readMix = async (req, res) => {
+const readMix = async (req, res) => {
     let result;
     try {
         result = await getMixed(req);
@@ -18,7 +18,7 @@ exports.readMix = async (req, res) => {
     }
 }
 
-exports.readDiv = async (req, res) => {
+const readDiv = async (req, res) => {
     const division = req.params.division;
     let result;
     try {
@@ -28,8 +28,8 @@ exports.readDiv = async (req, res) => {
             result = await getJournals(req);
         } else if (division === Divisions.comic) {
             result = await getComics(req);
-        } else if (division === Divisions.comic) {
-
+        } else if (division === Divisions.photography) {
+            result = await getPhotographyPosts(req);
         } else {
             return res.status(401).json(new Error(401, 'No or Invalid Division set'));
         }
@@ -103,7 +103,7 @@ const getMixed = async (req) => {
  * @param res
  * @returns {Promise<*>}
  */
-exports.create = async (req, res) => {
+const create = async (req, res) => {
     const division = req.body.division.toLowerCase();
 
     if (!division)
@@ -136,11 +136,20 @@ exports.create = async (req, res) => {
                 console.log(err);
                 res.status(err.code).json(err);
             });
+    } else if (division === Divisions.photography) {
+        await uploadPhotographyPost(req.user.id, req.body)
+            .then((result) => {
+                console.log(result);
+                res.status(result.code).json(result);
+            }).catch(err => {
+                console.log(err);
+                res.status(err.code).json(err);
+            });
     }
 
 }
 
-exports.readByDivId = async (req, res) => {
+const readByDivId = async (req, res) => {
     //TODO search post from division collections
     const {division, id} = req.params;
     let result;
@@ -152,7 +161,7 @@ exports.readByDivId = async (req, res) => {
         } else if (division === Divisions.comic) {
             result = await getSingleComic(id);
         } else if (division === Divisions.comic) {
-
+            result = await getSinglePhotographyPost(id);
         } else {
             return res.status(401).json(new Error(401, 'No or Invalid Division set'));
         }
@@ -172,7 +181,7 @@ exports.readByDivId = async (req, res) => {
     }
 }
 
-exports.readById = async (req, res) => {
+const readMixById = async (req, res) => {
     //TODO search post from mix collection
 }
 
@@ -405,17 +414,12 @@ const getSingleComic = async (id) => {
  */
 
 const uploadPhotographyPost = async (id, post) => {
-    const validate = validateComic(post);
-
-    if (validate instanceof Error)
-        return validate;
-
     try {
-        const comic = new Comic({author: id, ...post});
-        const newComic = await comic.save();
-        console.log(newComic);
-        await mix(newComic);
-        return new Success(201, "Created Successfully", newComic);
+        const photography = new Photography({author: id, ...post});
+        const newPhotography = await photography.save();
+        console.log(newPhotography);
+        await mix(newPhotography);
+        return new Success(201, "Created Successfully", newPhotography);
     } catch (err) {
         return new Error(500, `${err}`);
     }
@@ -424,7 +428,7 @@ const uploadPhotographyPost = async (id, post) => {
 const getPhotographyPosts = async (req) => {
     const {skip, limit, sortBy, order} = pagination(req);
     try {
-        return await Comic.find()
+        return await Photography.find()
             .select('-__v')
             .skip(skip).limit(limit)
             .sort([[sortBy, order]])
@@ -447,7 +451,7 @@ const getPhotographyPosts = async (req) => {
 
 const getSinglePhotographyPost = async (id) => {
     try {
-        return await Comic.findById(id)
+        return await Photography.findById(id)
             .populate([
                 {
                     path: 'author',
@@ -483,3 +487,24 @@ const mix = async (post) => {
         }
     });
 };
+
+module.exports = {
+    readDiv,
+    readMix,
+    create,
+    getMixed,
+    readByDivId,
+    readMixById,
+    uploadLiterature,
+    uploadPhotographyPost,
+    uploadJournal,
+    uploadComic,
+    getLiteratures,
+    getComics,
+    getJournals,
+    getPhotographyPosts,
+    getSinglePhotographyPost,
+    getSingleJournal,
+    getSingleComic,
+    getSingleLiterature
+}

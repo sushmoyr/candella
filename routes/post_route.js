@@ -14,7 +14,7 @@ router.get('/d/:division', contentController.readDiv);
 
 router.get('/d/:division/:id', contentController.readByDivId);
 
-router.get('/i/content/:id', contentController.readById);
+router.get('/i/content/:id', contentController.readMixById);
 
 
 module.exports = router;

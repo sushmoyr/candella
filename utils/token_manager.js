@@ -34,9 +34,29 @@ const verifyToken = async (req, res, next) => {
     }
 }
 
+const verifyTokenFromCookie = async (req, res, next) => {
+    const token = req.cookies['auth-token'];
+
+    if(token && !isTokenBlocked(token)){
+        jwt.verify(token, process.env.JWT_KEY, {}, (err, user)=> {
+            if(err){
+                req.url = req.url + 'login';
+                next('route');
+            }
+            console.log("user is ", user);
+            req.user = user;
+            next();
+        });
+
+    } else {
+        req.url = '/login';
+        next('route');
+    }
+}
+
 const destroyToken = (req, res, next)=>{
     const token = req.headers.token;
 
 }
 
-module.exports = {verifyToken, blockToken, isTokenBlocked};
+module.exports = {verifyToken, blockToken, isTokenBlocked, verifyTokenFromCookie};
