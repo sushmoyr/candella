@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/create.css">
+</head>
+<body class="bg-dark-c">
+<header>
+    <div class="main">
+        <h1 class="jumbo-dark">Create a new post</h1>
+    </div>
+</header>
+<main>
+    <div class="main">
+        <div class="container">
+            <form method="post" action="/content/create">
+                <label for="division">
+                    Division
+                    <select  id="division" name="division" onchange="onDivisionSelected(this);">
+                        <option selected>...</option>
+                        <option><%=divisions.literature %></option>
+                        <option><%=divisions.journal %></option>
+                        <option><%=divisions.comic %></option>
+                        <option><%=divisions.photography %></option>
+                    </select>
+                </label><br>
+                <label for="title">
+                    Title:
+                    <input type="text" id="title" name="title" placeholder="Title">
+                </label><br>
+                <label for="description">
+                    Description
+                    <textarea class="input" id="description" rows="8" name="description" placeholder="Description"></textarea>
+                </label><br>
+
+                <div id="categoryDiv" >
+                    <label for="category">
+                        Category
+                        <select  id="category" name="category">
+                            <% for (var i = 0; i < category.length; i++) { %>
+                            <option> <%=category[i].categoryName%> </option>
+                            <% } %>
+                        </select>
+                    </label><br>
+                </div>
+
+                <label for="genre">
+                    genre
+                    <select  id="genre" name="genre">
+                        <% for (var i = 0; i < genre.length; i++) { %>
+                        <option value="<%=genre[i]._id%>"> <%=genre[i].name%> </option>
+                        <% } %>
+                    </select>
+                </label><br>
+
+                <label for="lang">
+                    <select id="lang" name="lang">
+                        <option>en</option>
+                        <option>bn</option>
+                    </select>
+                </label><br>
+                <%var tags = []; var word;%>
+                Chapters:
+                <div id="chapters" style="display: flex; justify-content: center; flex-direction: column; align-self: center">
+
+                </div>
+                <button type="button" class="outline_btn" onclick="addChapter()">Add Chapter</button><br>
+                Tags:
+                <div id="tag-container" style="display: flex; align-self: center; width: inherit; max-width: 480px; justify-content: center; flex-wrap: wrap; align-content: center">
+
+                </div>
+
+                <label for="tag_input">
+
+                    <button type="button" class="outline_btn" onclick="getTag()">add tag</button>
+                </label><br>
+                <br>
+                <button class="custom-button" type="submit">Create Post</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+
+<script>
+    const tags = [];
+    function onDivisionSelected(that) {
+        const catDiv = document.getElementById('categoryDiv');
+        catDiv.style.display = 'none';
+        if(that.value === 'literature'){
+            catDiv.style.display = 'block';
+        }
+        else {
+            catDiv.style.display = 'none';
+        }
+    }
+
+    function getTag(){
+
+        const tagContainer = document.getElementById('tag-container');
+        const tagElement = document.createElement('input');
+        tagElement.name = 'tags';
+        tagElement.type = 'text';
+        tagElement.classList.add('input-sm');
+        tagContainer.appendChild(tagElement);
+    }
+    let chapterCount = 0;
+    function addChapter(){
+        const chapterContainer = document.getElementById('chapters');
+        const chapterName = document.createElement('input');
+        const chapterContent = document.createElement('textarea');
+
+        chapterName.name = `chapters[${chapterCount}][name]`;
+        chapterContent.name = `chapters[${chapterCount}][content]`;
+
+        chapterName.classList.add('input');
+        chapterContent.classList.add('input');
+
+        chapterName.placeholder = 'Chapter Name';
+        chapterContent.placeholder = 'Content';
+
+        chapterName.type = 'text';
+        chapterContent.rows = 8;
+
+        chapterContainer.appendChild(chapterName);
+        chapterContainer.appendChild(chapterContent);
+
+        chapterCount++;
+    }
+</script>
+
+</body>
+</html>
