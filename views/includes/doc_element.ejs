@@ -1,0 +1,58 @@
+<div class="container-dark">
+    <%
+        function syntaxHighlight(json) {
+            json = json.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+    %>
+    <%if (data.endpoint) {%>
+    <h1>Endpoint: <span class="endpoint"><%=data.endpoint%></span></h1>
+    <%}%>
+
+    <%if (data.description) {%>
+    <h1>Description</h1>
+    <div class="paragraph">
+        <%=data.description%>
+    </div>
+    <%}%>
+
+    <%if (data.request) {%>
+    <h1>Request</h1>
+    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.request, null, 2))%></pre>
+    <%}%>
+
+    <%if (data.headers && data.headers.length>0) {%>
+    <h1>Params</h1>
+    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.params, null, 2))%></pre>
+    <%}%>
+
+    <%if (data.params && data.params.length>0) {%>
+    <h1>Params</h1>
+    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.params, null, 2))%></pre>
+    <%}%>
+
+    <%if (data.query && data.query.length > 0) {%>
+    <h1>Query</h1>
+    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.query, null, 2))%></pre>
+    <%}%>
+
+
+    <%if (data.response) {%>
+    <h1>Response</h1>
+    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.response, null, 2))%></pre>
+    <%}%>
+</div>

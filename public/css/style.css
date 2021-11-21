@@ -55,6 +55,27 @@
     border-radius: 16px;
 }
 
+.container-dark{
+    background-color: #2f2e41;
+    color: ghostwhite;
+    align-items: flex-start;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    box-shadow: 7px 7px 16px rgba(0, 0, 0, 0.54);
+    border-radius: 16px;
+}
+
+.input {
+    padding:10px;
+    width: 240px;
+    margin: 16px;
+    border-radius: 8px;
+    border: 1px #3e80e3;
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+}
 
 .jumbo{
     font-family: cursive;
@@ -67,9 +88,20 @@
     color: white;
 }
 
-
+.paragraph{
+    font-size: 18px;
+    color: white;
+    padding: 8px;
+    width: fit-content;
+    margin: 8px;
+    font-family: "Roboto Light", serif;
+}
 
 html,body { overflow-y: scroll; }
+
+main{
+    padding: 24px;
+}
 
 .custom-button {
 
@@ -112,3 +144,30 @@ html,body { overflow-y: scroll; }
     padding: 0;
     font-family: "Meiryo UI", ui-serif;
 }
+
+.json {
+    background-color: #24252a;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 16px;
+    width: fit-content;
+    outline: 1px solid #ccc;
+}
+
+.endpoint {
+    padding: 16px;
+    margin: 8px 0;
+    font-size: 24px;
+    font-style: italic;
+    width: fit-content;
+    border-radius: 4px;
+    color: greenyellow;
+}
+
+
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: rgba(238, 114, 103, 0.91); }

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/create.css">
+    <link rel="stylesheet" href="/css/nav.css">
+</head>
+<body style="background-color: #121212; color: white">
+    <%- include('includes/navbar.ejs')%>
+    <main>
+        <h1 class="jumbo">Documentation</h1>
+        <% for (var i = 0; i <docs.length; i++) { console.log("data = " + JSON.stringify(docs[i]));%>
+        <div style="margin: 24px 0">
+            <h1><%=i+1%>.</h1>
+            <%-include('includes/doc_element.ejs', {data: docs[i]})%>
+        </div>
+        <%} %>
+    </main>
+</body>
+
+
+</html>

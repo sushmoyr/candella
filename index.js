@@ -46,6 +46,7 @@ app.use('/api/v1/u', routes.authRoutes);
 app.use('/api/v1/u', routes.userRoutes);
 app.use('/api/v1/utils', routes.utilsRoutes);
 app.use('/api/v1/c', routes.postRoutes);
+app.use('/dev/api', routes.docRoutes);
 
 //view routes
 app.use(userViewRoute);

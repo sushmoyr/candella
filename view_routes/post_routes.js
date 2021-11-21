@@ -40,7 +40,7 @@ router.post('/create', verifyTokenFromCookie, async (req, res) => {
         return res.render('result', {error: error, success: null});
     }
 
-    console.log(req.body);
+    console.log(JSON.stringify(req.body, null, 2));
 
     if (division === Divisions.literature) {
         await uploadLiterature(req.user.id, req.body)

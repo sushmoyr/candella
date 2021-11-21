@@ -1,0 +1,36 @@
+GET http://localhost:8080/dev/api
+Accept: application/json
+
+###
+POST http://localhost:8080/dev/api/add_doc?id=17101129&password=241smbsk
+Content-Type: application/json
+
+{
+  "endpoint": "/u/login",
+  "description": "This end point is used to login the user.",
+  "request": {
+    "login": "email@example.com",
+    "password": "examplePassword"
+  },
+  "response": {
+    "code": 201,
+    "message": "Login Successful",
+    "body": "auth token for future use"
+  }
+}
+
+###
+
+POST http://localhost:8080/dev/api/add_doc?id=17101129&password=241smbsk
+Content-Type: application/json
+
+{
+  "endpoint": "all",
+  "description": "The error response for all the endpoints are same. Below is the example of error response.",
+  "response": {
+    "code": 500,
+    "message": "A server error has occurred"
+  }
+}
+
+###

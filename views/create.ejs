@@ -8,17 +8,17 @@
     <title>Create Post</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/create.css">
+    <link rel="stylesheet" href="/css/nav.css">
 </head>
 <body class="bg-dark-c">
-<header>
-    <div class="main">
-        <h1 class="jumbo-dark">Create a new post</h1>
-    </div>
-</header>
+<%- include('includes/navbar.ejs')%>
+<div class="main">
+    <h1 class="jumbo-dark">Create a new post</h1>
+</div>
 <main>
     <div class="main">
         <div class="container">
-            <form method="post" action="/content/create">
+            <form id="input-form" method="post" action="/content/create">
                 <label for="division">
                     Division
                     <select  id="division" name="division" onchange="onDivisionSelected(this);">
@@ -31,7 +31,7 @@
                 </label><br>
                 <label for="title">
                     Title:
-                    <input type="text" id="title" name="title" placeholder="Title">
+                    <input class="input" type="text" id="title" name="title" placeholder="Title">
                 </label><br>
                 <label for="description">
                     Description
@@ -89,9 +89,12 @@
 
 <script>
     const tags = [];
+    let selectedDivision = "...";
     function onDivisionSelected(that) {
         const catDiv = document.getElementById('categoryDiv');
-        catDiv.style.display = 'none';
+        resetForm();
+
+        selectedDivision = that.value;
         if(that.value === 'literature'){
             catDiv.style.display = 'block';
         }
@@ -111,6 +114,63 @@
     }
     let chapterCount = 0;
     function addChapter(){
+        if(selectedDivision === 'comic'){
+            addComicChapter();
+        } else {
+            addTextChapter();
+        }
+    }
+
+    function addComicChapter(){
+        let imageCount = prompt("Enter the number of images in the chapter: ");
+        const chapterContainer = document.getElementById('chapters');
+        const chapterName = document.createElement('input');
+
+        /*const template = `
+        <input class="input" name="chapters[${chapterCount}][name]" type="text" placeholder="Chapter Name">
+        <input>
+        `*/
+
+        const chapterContentDiv = document.createElement('div');
+        /*const button = document.createElement('button');
+        button.type = 'button';
+        button.innerText = 'Add image link'
+        button.classList.add('outline_btn');*/
+
+        chapterName.name = `chapters[${chapterCount}][name]`;
+
+        chapterName.classList.add('input');
+
+        chapterName.placeholder = 'Chapter Name';
+
+        chapterName.type = 'text';
+
+        chapterContainer.appendChild(chapterName);
+
+        /*chapterContentDiv.appendChild(button);
+
+        chapterContainer.appendChild(chapterContentDiv);*/
+
+        for (let i = 0; i < imageCount; i++) {
+            const chapterContent = document.createElement('input');
+            chapterContent.name = `chapters[${chapterCount}][contentImages]`;
+            chapterContent.classList.add('input');
+            chapterContent.placeholder = 'Content';
+            chapterContainer.appendChild(chapterContent);
+        }
+
+        /*button.onclick = () => {
+            const chapterContent = document.createElement('input');
+            chapterContent.name = `chapters[${chapterCount}][contentImages]`;
+            chapterContent.classList.add('input');
+            chapterContent.placeholder = 'ImageLink';
+            chapterContentDiv.appendChild(chapterContent);
+        };*/
+
+        chapterCount++;
+    }
+
+    function addTextChapter(){
         const chapterContainer = document.getElementById('chapters');
         const chapterName = document.createElement('input');
         const chapterContent = document.createElement('textarea');
@@ -131,6 +191,16 @@
         chapterContainer.appendChild(chapterContent);
 
         chapterCount++;
+    }
+
+    function resetForm(){
+        /*const form = document.getElementById('input-form');
+        form.clear();*/
+        chapterCount = 0;
+        /*const tags = document.getElementById('tag-container').children;
+        for (const tag of tags) {
+            document.getElementById('tag-container').removeChild(tag);
+        }*/
     }
 </script>
 
