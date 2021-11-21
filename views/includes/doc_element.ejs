@@ -19,24 +19,28 @@
             });
         }
     %>
-    <%if (data.endpoint) {%>
-    <h1>Endpoint: <span class="endpoint"><%=data.endpoint%></span></h1>
-    <%}%>
+    <% if (data.endpoint) { %>
+    <h1>Endpoint: <span class="endpoint"><%= data.endpoint %></span></h1>
+    <% } %>
 
-    <%if (data.description) {%>
+    <% if (data.method) { %>
+    <h1>Method: <span class="endpoint"><%= data.method %></span></h1>
+    <% } %>
+
+    <% if (data.description) { %>
     <h1>Description</h1>
     <div class="paragraph">
-        <%=data.description%>
+        <%= data.description %>
     </div>
-    <%}%>
+    <% } %>
 
-    <%if (data.request) {%>
+    <% if (data.request) { %>
     <h1>Request</h1>
     <pre class="json"><%-syntaxHighlight(JSON.stringify(data.request, null, 2))%></pre>
     <%}%>
 
     <%if (data.headers && data.headers.length>0) {%>
-    <h1>Params</h1>
+    <h1>Headers</h1>
     <pre class="json"><%-syntaxHighlight(JSON.stringify(data.params, null, 2))%></pre>
     <%}%>
 

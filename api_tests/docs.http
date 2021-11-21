@@ -6,31 +6,19 @@ POST http://localhost:8080/dev/api/add_doc?id=17101129&password=241smbsk
 Content-Type: application/json
 
 {
-  "endpoint": "/u/login",
-  "description": "This end point is used to login the user.",
-  "request": {
-    "login": "email@example.com",
-    "password": "examplePassword"
-  },
+  "endpoint": "/u/logout",
+  "description": "This end point is used to logout the current user.",
   "response": {
     "code": 201,
-    "message": "Login Successful",
-    "body": "auth token for future use"
-  }
+    "message": "Logged out Successfully"
+  },
+  "headers": [
+    {
+      "name": "token",
+      "desc": "Pass the token received after login"
+    }
+  ]
 }
 
 ###
 
-POST http://localhost:8080/dev/api/add_doc?id=17101129&password=241smbsk
-Content-Type: application/json
-
-{
-  "endpoint": "all",
-  "description": "The error response for all the endpoints are same. Below is the example of error response.",
-  "response": {
-    "code": 500,
-    "message": "A server error has occurred"
-  }
-}
-
-###

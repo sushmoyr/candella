@@ -5,6 +5,9 @@ const docSchema = new Schema({
     endpoint: {
         type: String
     },
+    method: {
+        type: String
+    },
     description: {
         type: String
     },
