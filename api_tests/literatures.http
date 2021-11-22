@@ -1,3 +1,12 @@
+GET http://localhost:8080/api/v1/c?excludes=tags_lang_ratings_thoughts_author_alternateNames_genre
+Accept: application/json
+
+###
+
+PUT http://localhost:8080/api/v1/c/i/content/619a9b2c670f82a3a7e468f5?excludes=tags_lang_ratings_thoughts_author
+Accept: application/json
+
+###
 GET http://localhost:8080/api/v1/c/d/literature/619624fe78c932aa105028f4
 Accept: application/json
 
@@ -11,46 +20,48 @@ Accept: application/json
 ###
 POST http://localhost:8080/api/v1/c
 Content-Type: application/json
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3OTgwYiIsImlhdCI6MTYzNzE3MzU2NiwiZXhwIjoxNjM3MjU5OTY2fQ.6DdO6ZYAXJoZHlVYoNooOfQrlkCb7QlMwV4JhQVXpBw
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWE4ODY3NjQ3NTRlMGZjNDRhNjM3NSIsImlhdCI6MTYzNzUyMTc4OSwiZXhwIjoxNjM3NjA4MTg5fQ.u6WNlImkoHlyDdakORAAiYfFP271Ow-8y-uICRlT6VA
 
 {
-  "title": "My title #23",
-  "desc": "My desc",
+  "title": "Title to be updated",
+  "description": "My desc",
   "division": "literature",
   "category": "story",
-  "genre": "61957b15997800bdff0f7822",
+  "genre": "61957b15997800bdff0f7822"
+}
+
+###
+PUT http://localhost:8080/api/v1/c/i/content/619b2e2679b1154c9ad7e83a
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWE4ODY3NjQ3NTRlMGZjNDRhNjM3NSIsImlhdCI6MTYzNzUyMTc4OSwiZXhwIjoxNjM3NjA4MTg5fQ.u6WNlImkoHlyDdakORAAiYfFP271Ow-8y-uICRlT6VA
+
+{
+  "title": "Title is by mix",
+  "desc": "No description is needed",
   "thoughts": [
     {
       "by": "619137689743cdae07816e7f",
       "value": "Can be better."
-    },
-    {
-      "by": "61913734f24ceeb085e48bcf",
-      "value": "Nice one."
-    }
-  ],
-  "ratings" : [
-    {
-      "by": "619137689743cdae07816e7f",
-      "value": 3
-    },
-    {
-      "by": "61913734f24ceeb085e48bcf",
-      "value": 4
     }
   ]
 }
 
 ###
+DELETE http://localhost:8080/api/v1/c/i/content/619b429ec3063154da5f4831
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWE4ODY3NjQ3NTRlMGZjNDRhNjM3NSIsImlhdCI6MTYzNzUyMTc4OSwiZXhwIjoxNjM3NjA4MTg5fQ.u6WNlImkoHlyDdakORAAiYfFP271Ow-8y-uICRlT6VA
+
+###
 
 POST http://localhost:8080/api/v1/c
 Content-Type: application/json
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3OTgwYiIsImlhdCI6MTYzNzI2MTMyOSwiZXhwIjoxNjM3MzQ3NzI5fQ.UDZ6qkacUSC9w40nXSBxdStFbjK-eZAb5IUIHn50Yl8
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWE4ODY3NjQ3NTRlMGZjNDRhNjM3NSIsImlhdCI6MTYzNzUyMTc4OSwiZXhwIjoxNjM3NjA4MTg5fQ.u6WNlImkoHlyDdakORAAiYfFP271Ow-8y-uICRlT6VA
 
 {
   "title": "A brief history of mankind",
   "desc": "Here we will discuss the history of mankind",
-  "division": "journal",
+  "division": "literature",
+  "category": "Story",
   "genre": "61957b38997800bdff0f7824",
   "thoughts": [
     {
@@ -58,7 +69,7 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTE0MWY3ZTQ5M2Q0NGM0MzQ3
       "value": "Can be better."
     }
   ],
-  "ratings" : [
+  "ratings": [
     {
       "by": "619137689743cdae07816e7f",
       "value": 3

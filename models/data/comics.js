@@ -2,6 +2,7 @@ const {Schema, model} = require('mongoose');
 const {comicChapter} = require("./chapter");
 const rating = require("./rating");
 const thoughts = require("./thoughts");
+const {Divisions} = require("../../utils/Constants");
 
 const comicSchema = new Schema({
     author: {
@@ -22,7 +23,7 @@ const comicSchema = new Schema({
     },
     division: {
         type: String,
-        default: "Comic"
+        default: Divisions.comic
     },
     genre: {
         type: Schema.Types.ObjectId,
@@ -66,4 +67,4 @@ comicSchema.virtual('chapterCount').get(function (){
     return (chapters)?chapters.length:0;
 });
 
-module.exports = model('Comics', comicSchema);
+module.exports = model(Divisions.comic, comicSchema);

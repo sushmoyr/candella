@@ -14,24 +14,9 @@ const docSchema = new Schema({
     request: {
         type: Schema.Types.Mixed
     },
-    params: [
-        {
-            name: String,
-            desc: String
-        }
-    ],
-    query: [
-        {
-            name: String,
-            desc: String
-        }
-    ],
-    headers: [
-        {
-            name: String,
-            desc: String
-        }
-    ],
+    params: Schema.Types.Mixed,
+    query: Schema.Types.Mixed,
+    headers: Schema.Types.Mixed,
     response: {
         type: Schema.Types.Mixed
     }

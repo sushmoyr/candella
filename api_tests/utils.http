@@ -1,16 +1,14 @@
-POST {{host}}/api/v1/utils/genre
+GET {{host}}/api/v1/utils/genre
 Content-Type: application/json
 
-{
-  "name": "Science"
-}
 
 ###
 PUT {{host}}/api/v1/utils/category/618f887e9eae23e89d729ffd
 Content-Type: application/json
 
 {
-  "categoryName": "Drama"
+  "categoryName": "Drama",
+  "divisionName": "Literature"
 }
 
 ###
@@ -18,8 +16,8 @@ POST {{host}}/api/v1/utils/category
 Content-Type: application/json
 
 {
-  "categoryName": "Drama",
-  "divisionName": "{{divisionName}}"
+  "categoryName": "test1",
+  "divisionName": "division1"
 }
 
 ###

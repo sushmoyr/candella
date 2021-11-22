@@ -24,7 +24,7 @@ exports.addCategory = async (req, res) => {
     }
 }
 exports.updateCategory = async (req, res) => {
-    const category = await Category.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body, {new: true});
     res.status(200).json(category);
 }
 

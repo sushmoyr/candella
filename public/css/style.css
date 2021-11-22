@@ -166,8 +166,22 @@ main{
 }
 
 
-.string { color: green; }
-.number { color: darkorange; }
-.boolean { color: blue; }
-.null { color: magenta; }
-.key { color: rgba(238, 114, 103, 0.91); }
+.string {
+    color: #1fec1f;
+}
+
+.number {
+    color: #ffa233;
+}
+
+.boolean {
+    color: blue;
+}
+
+.null {
+    color: magenta;
+}
+
+.key {
+    color: rgba(238, 114, 103, 0.91);
+}

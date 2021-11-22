@@ -20,8 +20,28 @@ const normalizePosts = (excludes, posts) => {
     return normalized;
 }
 
+const normalizeMix = (excludes, posts) => {
+    const fields = excludes.split('_');
+    const normalized = [];
+
+    posts.forEach((post) => {
+        normalized.push(excludeFieldsFromMix(excludes, post));
+    })
+    return normalized;
+
+}
+
 const excludeFields = (excludes, post) => {
-    let obj = {};
+    return exclude(excludes, post);
+}
+
+const excludeFieldsFromMix = (excludes, post) => {
+    const data = post.data;
+    return exclude(excludes, data);
+}
+
+const exclude = (excludes, post) => {
+    const obj = {};
     const {_doc} = post;
     //console.log(post.totalRating);
     const keys = Object.keys(_doc);
@@ -37,6 +57,7 @@ const excludeFields = (excludes, post) => {
         obj['chapterCount'] = post.chapterCount;
     console.log(obj);
     return obj;
+
 }
 
 const validateLitData = post => {
@@ -115,9 +136,11 @@ const validateComic = post => {
 
 module.exports = {
     pagination,
-    normalizePost: normalizePosts,
+    normalizePosts: normalizePosts,
     validateLitData,
     validateJournal,
     excludeFields,
-    validateComic
+    validateComic,
+    excludeFieldsFromMix,
+    normalizeMix
 }

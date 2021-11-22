@@ -17,7 +17,8 @@ const literatureSchema = new Schema({
         type: [String]
     },
     description: {
-        type: String
+        type: String,
+        max: 200
     },
     coverImage: {
         type: String

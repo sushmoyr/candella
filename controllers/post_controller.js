@@ -6,96 +6,11 @@ const Comic = require('../models/data/comics');
 const Photography = require('../models/data/photography');
 const MixedContents = require('../models/data/mixedContents');
 const {Divisions} = require('../utils/Constants');
-const {pagination, normalizePost, validateLitData, validateJournal, excludeFields, validateComic} = require("../utils/helpers");
-//get all mixed
-const readMix = async (req, res) => {
-    let result;
-    try {
-        result = await getMixed(req);
-        res.status(200).json(result);
-    } catch (e) {
-        res.status(500).json(e);
-    }
-}
+const {
+    pagination, normalizePosts, validateLitData, validateJournal, excludeFields, validateComic, excludeFieldsFromMix,
+    normalizeMix
+} = require("../utils/helpers");
 
-const readDiv = async (req, res) => {
-    const division = req.params.division;
-    let result;
-    try {
-        if (division === Divisions.literature) {
-            result = await getLiteratures(req);
-        } else if (division === Divisions.journal) {
-            result = await getJournals(req);
-        } else if (division === Divisions.comic) {
-            result = await getComics(req);
-        } else if (division === Divisions.photography) {
-            result = await getPhotographyPosts(req);
-        } else {
-            return res.status(401).json(new Error(401, 'No or Invalid Division set'));
-        }
-        //console.log(result);
-        if (result instanceof Error)
-            return res.status(result.code).json(result);
-
-        if (req.query['excludes']) {
-            console.log('excludes = ' + req.query['excludes']);
-            result = normalizePost(req.query['excludes'], result);
-        }
-        res.status(200).json(result);
-    } catch (e) {
-        console.log(e);
-        res.status(500).json(new Error(500, e));
-    }
-}
-
-const normalizeMix = (req, mixes) => {
-    const excludes = req.query['excludes'];
-    const fields = excludes.split('_');
-    console.log(fields);
-    const normalizedMix = [];
-    mixes.forEach((mix) => {
-        const {_doc} = mix;
-        let {...doc} = _doc;
-        let data = doc.content.data;
-        console.log(data);
-
-        data['thoughts'] = undefined;
-        console.log('Deleted: ');
-
-        console.log(data)
-
-
-        normalizedMix.push(_doc);
-    })
-    //console.log(JSON.stringify(normalizedMix));
-    return normalizedMix;
-
-}
-
-const getMixed = async (req) => {
-    const {skip, limit, sortBy, order} = pagination(req);
-    try {
-        return await MixedContents.find()
-            .select('-_id -__v')
-            .skip(skip).limit(limit)
-            .sort([[sortBy, order]])
-            .populate({
-                path: 'content.data',
-                select: "-__v",
-                populate: [{
-                    path: 'author',
-                    select: "_id name email pen_name"
-                }, {
-                    path: 'genre',
-                    select: "-_id -__v"
-                }
-                ],
-            });
-    } catch (e) {
-        console.log('remixed' + e);
-        return e;
-    }
-}
 
 /**
  * Creates a mew content object. Method: Post
@@ -149,8 +64,44 @@ const create = async (req, res) => {
 
 }
 
+/**
+ * Reads a mew content object by division and id. Method: GET
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+
+const readByDiv = async (req, res) => {
+    const division = req.params.division;
+    let result;
+    try {
+        if (division === Divisions.literature) {
+            result = await getLiteratures(req);
+        } else if (division === Divisions.journal) {
+            result = await getJournals(req);
+        } else if (division === Divisions.comic) {
+            result = await getComics(req);
+        } else if (division === Divisions.photography) {
+            result = await getPhotographyPosts(req);
+        } else {
+            return res.status(401).json(new Error(401, 'No or Invalid Division set'));
+        }
+        //console.log(result);
+        if (result instanceof Error)
+            return res.status(result.code).json(result);
+
+        if (req.query['excludes']) {
+            console.log('excludes = ' + req.query['excludes']);
+            result = normalizePosts(req.query['excludes'], result);
+        }
+        res.status(200).json(result);
+    } catch (e) {
+        console.log(e);
+        res.status(500).json(new Error(500, e));
+    }
+}
+
 const readByDivId = async (req, res) => {
-    //TODO search post from division collections
     const {division, id} = req.params;
     let result;
     try {
@@ -181,9 +132,6 @@ const readByDivId = async (req, res) => {
     }
 }
 
-const readMixById = async (req, res) => {
-    //TODO search post from mix collection
-}
 
 /**
  * Literature Block for literature type
@@ -251,9 +199,7 @@ const getSingleLiterature = async (id) => {
                 },
             ]);
     } catch (e) {
-        console.log(e);
-        res.status(500)
-            .json(new Error(500, e));
+        return new Error(500, e);
     }
 }
 
@@ -477,19 +423,194 @@ const getSinglePhotographyPost = async (id) => {
     }
 }
 
+/**
+ * Mix Post Block for all types
+ * post's crud operations
+ */
 
 const mix = async (post) => {
     const {_id, division} = post;
     await MixedContents.create({
-        content: {
-            division: division,
-            data: _id
-        }
+        division: division,
+        dataId: _id,
+        data: _id
     });
 };
 
+const readMixById = async (req, res) => {
+    const id = req.params.id;
+    let result = await getSingleMix(id);
+    console.log(result);
+    if (result instanceof Error)
+        return res.status(result.code).json(result);
+
+    if (req.query['excludes']) {
+        console.log('excludes = ' + req.query['excludes']);
+        result = excludeFieldsFromMix(req.query['excludes'], result);
+    }
+
+    res.status(200).json(result);
+
+}
+
+const readMix = async (req, res) => {
+    let result;
+    result = await getMixed(req);
+
+    if (result instanceof Error)
+        return res.status(result.code).json(result);
+
+    if (req.query['excludes']) {
+        console.log('excludes = ' + req.query['excludes']);
+        result = normalizeMix(req.query['excludes'], result);
+    }
+
+    res.status(200).json(result);
+}
+
+const getSingleMix = async (id, populate = true) => {
+    try {
+        return (populate) ?
+            await MixedContents.findOne({dataId: id}).populate('data') :
+            await MixedContents.findOne({dataId: id});
+    } catch (e) {
+        return new Error(500, e);
+    }
+}
+
+const getMixed = async (req) => {
+    const {skip, limit, sortBy, order} = pagination(req);
+    try {
+        return await MixedContents.find()
+            .select('-_id -__v')
+            .skip(skip).limit(limit)
+            .sort([[sortBy, order]])
+            .populate({
+                path: 'data',
+                select: "-__v",
+                populate: [{
+                    path: 'author',
+                    select: "_id name email pen_name"
+                }, {
+                    path: 'genre',
+                    select: "-_id -__v"
+                }
+                ],
+            });
+    } catch (e) {
+        console.log('remixed: ' + e);
+        return e;
+    }
+}
+
+//UPDATE single post by id
+
+const updateMixById = async (req, res) => {
+    const id = req.params.id;
+    const mix = await getSingleMix(id, false);
+    //console.log(mix);
+    const {dataId, division} = mix;
+    console.log(dataId);
+    const result = await updateByDivId(division, dataId, req.body);
+    if (result instanceof Error)
+        return res.status(result.code).json(result);
+
+    return res.status(201).json(result);
+}
+
+//UPDATE single post by division and id
+
+const updateByDivIdReq = async (req, res) => {
+    const div = req.params.division;
+    const id = req.params.id;
+    const result = await updateByDivId(div, id, req.body);
+
+    if (result instanceof Error)
+        return res.status(result.code).json(result);
+
+    return res.status(201).json(result);
+}
+
+const updateByDivId = async (div, id, data) => {
+    console.log(div, id);
+    const {division, thoughts, ratings, chapters, ...body} = data;
+    let result;
+
+    try {
+        if (div === Divisions.literature) {
+            result = await Literature.findByIdAndUpdate(id, body, {new: true});
+        } else if (div === Divisions.journal) {
+            result = await Journal.findByIdAndUpdate(id, body, {new: true});
+        } else if (div === Divisions.comic) {
+            result = await Comic.findByIdAndUpdate(id, body, {new: true});
+        } else if (div === Divisions.photography) {
+            result = await Photography.findByIdAndUpdate(id, body, {new: true});
+        } else {
+            result = new Error(404, "Invalid division. Check division");
+        }
+    } catch (e) {
+        result = new Error(500, e);
+    }
+
+    return result;
+}
+
+//DELETE POST by id
+const deleteById = async (req, res) => {
+    const id = req.params.id;
+    const mix = await getSingleMix(id, false);
+    const {division} = mix;
+    const result = await deletePost(division, id);
+
+    if (result instanceof Error)
+        return res.status(result.code).json(result);
+
+    return res.status(200).json(result);
+}
+//DELETE POST by division and id
+const deleteByDivId = async (req, res) => {
+    const {division, id} = req.params;
+    const result = await deletePost(division, id);
+    if (result instanceof Error)
+        return res.status(result.code).json(result);
+
+    return res.status(200).json(result);
+}
+
+const deletePost = async (div, id) => {
+    let result;
+    try {
+        if (div === Divisions.literature) {
+            result = await Literature.findByIdAndDelete(id);
+        } else if (div === Divisions.journal) {
+            result = await Journal.findByIdAndDelete(id);
+        } else if (div === Divisions.comic) {
+            result = await Comic.findByIdAndDelete(id);
+        } else if (div === Divisions.photography) {
+            result = await Photography.findByIdAndDelete(id);
+        } else {
+            result = new Error(404, "Invalid division. Check division");
+        }
+        if (!(result instanceof Error)) {
+            result = new Success(200, "Post deleted", result);
+            await deleteMixByDataId(id);
+        }
+    } catch (e) {
+        result = new Error(500, e);
+    }
+
+    return result;
+}
+
+const deleteMixByDataId = async (id) => {
+    await MixedContents.findOneAndDelete({dataId: id});
+}
+//TODO: CRUD Comment(s)
+//TODO: CRUD Rating(s)
+//TODO: CRUD chapter(s)
+
 module.exports = {
-    readDiv,
+    readDiv: readByDiv,
     readMix,
     create,
     getMixed,
@@ -506,5 +627,9 @@ module.exports = {
     getSinglePhotographyPost,
     getSingleJournal,
     getSingleComic,
-    getSingleLiterature
+    getSingleLiterature,
+    updateByDivIdReq,
+    updateMixById,
+    deleteByDivId,
+    deleteById
 }

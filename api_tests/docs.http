@@ -1,24 +1,30 @@
-GET http://localhost:8080/dev/api
-Accept: application/json
+POST http://localhost:8080/dev/api/add_doc?id=17101129&password=241smbsk
+Content-Type: application/json
+
+{
+  "endpoint": "/c",
+  "description": "This endpoint is to create a new post. This will create a post of every division. The division should be passed in the ",
+  "method": "",
+  "request": "",
+  "params": [],
+  "queries": [],
+  "headers": [],
+  "response": ""
+}
 
 ###
 POST http://localhost:8080/dev/api/add_doc?id=17101129&password=241smbsk
 Content-Type: application/json
 
 {
-  "endpoint": "/u/logout",
-  "description": "This end point is used to logout the current user.",
-  "response": {
-    "code": 201,
-    "message": "Logged out Successfully"
-  },
-  "headers": [
-    {
-      "name": "token",
-      "desc": "Pass the token received after login"
-    }
-  ]
+  "endpoint": "",
+  "description": "",
+  "method": "",
+  "request": "",
+  "params": [],
+  "queries": [],
+  "headers": [],
+  "response": ""
 }
 
 ###
-

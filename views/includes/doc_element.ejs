@@ -36,22 +36,22 @@
 
     <% if (data.request) { %>
     <h1>Request</h1>
-    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.request, null, 2))%></pre>
-    <%}%>
+    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.request, null, 2)) %></pre>
+    <% } %>
 
-    <%if (data.headers && data.headers.length>0) {%>
+    <% if (data.headers && data.headers.length > 0) { %>
     <h1>Headers</h1>
-    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.params, null, 2))%></pre>
-    <%}%>
+    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.headers, null, 2)) %></pre>
+    <% } %>
 
-    <%if (data.params && data.params.length>0) {%>
+    <% if (data.params && data.params.length > 0) { %>
     <h1>Params</h1>
-    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.params, null, 2))%></pre>
-    <%}%>
+    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.params, null, 2)) %></pre>
+    <% } %>
 
-    <%if (data.query && data.query.length > 0) {%>
+    <% if (data.query && data.query.length > 0) { %>
     <h1>Query</h1>
-    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.query, null, 2))%></pre>
+    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.query, null, 2)) %></pre>
     <%}%>
 
 
