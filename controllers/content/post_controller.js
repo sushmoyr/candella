@@ -1,15 +1,15 @@
-const Error = require('../models/utils/error');
-const Success = require('../models/utils/success');
-const Literature = require('../models/data/literature');
-const Journal = require('../models/data/journal');
-const Comic = require('../models/data/comics');
-const Photography = require('../models/data/photography');
-const MixedContents = require('../models/data/mixedContents');
-const {Divisions} = require('../utils/Constants');
+const Error = require('../../models/utils/error');
+const Success = require('../../models/utils/success');
+const Literature = require('../../models/data/literature');
+const Journal = require('../../models/data/journal');
+const Comic = require('../../models/data/comics');
+const Photography = require('../../models/data/photography');
+const MixedContents = require('../../models/data/mixedContents');
+const {Divisions} = require('../../utils/Constants');
 const {
     pagination, normalizePosts, validateLitData, validateJournal, excludeFields, validateComic, excludeFieldsFromMix,
     normalizeMix
-} = require("../utils/helpers");
+} = require("../../utils/helpers");
 
 
 /**
@@ -511,7 +511,7 @@ const updateMixById = async (req, res) => {
     //console.log(mix);
     const {dataId, division} = mix;
     console.log(dataId);
-    const result = await updateByDivId(division, dataId, req.body);
+    const result = await updateByDivId(division, dataId, req.body, req.user.id);
     if (result instanceof Error)
         return res.status(result.code).json(result);
 
@@ -523,7 +523,7 @@ const updateMixById = async (req, res) => {
 const updateByDivIdReq = async (req, res) => {
     const div = req.params.division;
     const id = req.params.id;
-    const result = await updateByDivId(div, id, req.body);
+    const result = await updateByDivId(div, id, req.body, req.user.id);
 
     if (result instanceof Error)
         return res.status(result.code).json(result);
@@ -531,27 +531,37 @@ const updateByDivIdReq = async (req, res) => {
     return res.status(201).json(result);
 }
 
-const updateByDivId = async (div, id, data) => {
+const updateByDivId = async (div, id, data, userId) => {
     console.log(div, id);
     const {division, thoughts, ratings, chapters, ...body} = data;
     let result;
+    const filter = {
+        _id: id,
+        author: userId
+    };
 
     try {
         if (div === Divisions.literature) {
-            result = await Literature.findByIdAndUpdate(id, body, {new: true});
+            result = await Literature.findOneAndUpdate(filter, body, {new: true});
         } else if (div === Divisions.journal) {
-            result = await Journal.findByIdAndUpdate(id, body, {new: true});
+            result = await Journal.findOneAndUpdate(filter, body, {new: true});
         } else if (div === Divisions.comic) {
-            result = await Comic.findByIdAndUpdate(id, body, {new: true});
+            result = await Comic.findOneAndUpdate(filter, body, {new: true});
         } else if (div === Divisions.photography) {
-            result = await Photography.findByIdAndUpdate(id, body, {new: true});
+            result = await Photography.findOneAndUpdate(filter, body, {new: true});
         } else {
             result = new Error(404, "Invalid division. Check division");
         }
     } catch (e) {
+        console.log(e)
         result = new Error(500, e);
     }
 
+    if (result === null) {
+        result = new Error(401, "Couldn't find the post. May be this was not posted by the user.")
+    }
+
+    console.log("result = ", result);
     return result;
 }
 
@@ -560,7 +570,7 @@ const deleteById = async (req, res) => {
     const id = req.params.id;
     const mix = await getSingleMix(id, false);
     const {division} = mix;
-    const result = await deletePost(division, id);
+    const result = await deletePost(division, id, req.user.id);
 
     if (result instanceof Error)
         return res.status(result.code).json(result);
@@ -570,27 +580,36 @@ const deleteById = async (req, res) => {
 //DELETE POST by division and id
 const deleteByDivId = async (req, res) => {
     const {division, id} = req.params;
-    const result = await deletePost(division, id);
+    const result = await deletePost(division, id, req.user.id);
     if (result instanceof Error)
         return res.status(result.code).json(result);
 
     return res.status(200).json(result);
 }
 
-const deletePost = async (div, id) => {
+const deletePost = async (div, id, userId) => {
     let result;
+    const filter = {
+        _id: id,
+        author: userId
+    }
     try {
         if (div === Divisions.literature) {
-            result = await Literature.findByIdAndDelete(id);
+            result = await Literature.findOneAndDelete(filter);
         } else if (div === Divisions.journal) {
-            result = await Journal.findByIdAndDelete(id);
+            result = await Journal.findOneAndDelete(filter);
         } else if (div === Divisions.comic) {
-            result = await Comic.findByIdAndDelete(id);
+            result = await Comic.findOneAndDelete(filter);
         } else if (div === Divisions.photography) {
-            result = await Photography.findByIdAndDelete(id);
+            result = await Photography.findOneAndDelete(filter);
         } else {
             result = new Error(404, "Invalid division. Check division");
         }
+
+        if (result === null) {
+            result = new Error(404, "Couldn't find the post. May be this was not posted by the user.");
+        }
+
         if (!(result instanceof Error)) {
             result = new Success(200, "Post deleted", result);
             await deleteMixByDataId(id);
@@ -605,9 +624,7 @@ const deletePost = async (div, id) => {
 const deleteMixByDataId = async (id) => {
     await MixedContents.findOneAndDelete({dataId: id});
 }
-//TODO: CRUD Comment(s)
-//TODO: CRUD Rating(s)
-//TODO: CRUD chapter(s)
+
 
 module.exports = {
     readDiv: readByDiv,
@@ -628,8 +645,9 @@ module.exports = {
     getSingleJournal,
     getSingleComic,
     getSingleLiterature,
+    getSingleMix,
     updateByDivIdReq,
     updateMixById,
     deleteByDivId,
-    deleteById
+    deleteById,
 }

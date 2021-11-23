@@ -1,5 +1,6 @@
 const Error = require("../models/utils/error");
 const Success = require("../models/utils/success");
+const {Divisions} = require("./Constants");
 const pagination = (req) => {
     const pageNo = (req.query['page']) ? req.query['page'] : 1;
     const sortBy = (req.query['sort_by']) ? req.query['sort_by'] : 'createdAt';
@@ -134,6 +135,28 @@ const validateComic = post => {
     return new Success(200);
 }
 
+const getModelFromDivision = division => {
+    if (division === Divisions.literature) {
+        return require('../models/data/literature');
+    } else if (division === Divisions.journal) {
+        return require('../models/data/literature');
+    } else if (division === Divisions.comic) {
+        return require('../models/data/literature');
+    } else if (division === Divisions.comic) {
+        return require('../models/data/literature');
+    } else {
+        return null;
+    }
+}
+
+const sendSuccessResponse = (res, body = {}, message = "Success") => {
+    res.status(200).json(new Success(200, message, body));
+}
+
+const sendErrorResponse = (res, code, message) => {
+    res.status(code).json(new Error(code, message));
+}
+
 module.exports = {
     pagination,
     normalizePosts: normalizePosts,
@@ -142,5 +165,8 @@ module.exports = {
     excludeFields,
     validateComic,
     excludeFieldsFromMix,
-    normalizeMix
+    normalizeMix,
+    getModelFromDivision,
+    sendSuccessResponse,
+    sendErrorResponse
 }

@@ -4,10 +4,15 @@ const Genre = require('../models/data/genre');
 const Category = require('../models/data/category');
 const Chapter = require('../models/data/chapter');
 const {verifyTokenFromCookie} = require("../utils/token_manager");
-const contentController = require('../controllers/post_controller');
+const contentController = require('../controllers/content/post_controller');
 const Error = require("../models/utils/error");
 const {Divisions} = require("../utils/Constants");
-const {uploadLiterature, uploadJournal, uploadComic, uploadPhotographyPost} = require("../controllers/post_controller");
+const {
+    uploadLiterature,
+    uploadJournal,
+    uploadComic,
+    uploadPhotographyPost
+} = require("../controllers/content/post_controller");
 const Success = require("../models/utils/success");
 
 //Literature Post
