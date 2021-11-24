@@ -157,6 +157,19 @@ const sendErrorResponse = (res, code, message) => {
     res.status(code).json(new Error(code, message));
 }
 
+const sortArrayByKey = (array, sortBy, order) => {
+    return array.sort((a, b) => {
+        const value1 = a[sortBy];
+        const value2 = b[sortBy];
+        console.log(value1, value2);
+        if (value1 > value2)
+            return (order === 'desc') ? -1 : 1;
+        if (value1 < value2)
+            return (order === 'desc') ? 1 : -1;
+        return 0;
+    });
+}
+
 module.exports = {
     pagination,
     normalizePosts: normalizePosts,
@@ -168,5 +181,6 @@ module.exports = {
     normalizeMix,
     getModelFromDivision,
     sendSuccessResponse,
-    sendErrorResponse
+    sendErrorResponse,
+    sortArrayByKey
 }

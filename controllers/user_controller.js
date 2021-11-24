@@ -24,7 +24,7 @@ exports.getCurrentUser = async (req, res) => {
         res.status(200).json(other);
     } catch (e) {
         res.status(500)
-            .json(new Error(500, "There was an error"));
+            .json(new Error(500, `Error: ${e}`));
     }
 }
 

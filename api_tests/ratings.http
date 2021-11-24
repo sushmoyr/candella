@@ -1,9 +1,22 @@
-GET http://localhost:8080/api/v1/c/rate/{{ratingTestId}}
+GET http://localhost:8080/api/v1/c/rate/{{ratingTestId}}?sort_by=value&order=asc
 Content-Type: application/json
-token: {{token2}}
+token: {{token}}
+
+
+###
+
+PUT http://localhost:8080/api/v1/c/rate/{{ratingTestId}}/{{ratingID}}
+Content-Type: application/json
+token: {{token}}
 
 {
-  "value": 5
+  "value": 2.5
 }
+
+###
+
+DELETE http://localhost:8080/api/v1/c/rate/{{ratingTestId}}/{{ratingID}}
+Content-Type: application/json
+token: {{token}}
 
 ###
