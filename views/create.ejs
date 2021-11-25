@@ -49,14 +49,10 @@
                     </label><br>
                 </div>
 
-                <label for="genre">
-                    genre
-                    <select  id="genre" name="genre">
-                        <% for (var i = 0; i < genre.length; i++) { %>
-                        <option value="<%=genre[i]._id%>"> <%=genre[i].name%> </option>
-                        <% } %>
-                    </select>
-                </label><br>
+                <div id="genre-container"
+                     style="display: flex; justify-content: center; flex-direction: column; align-self: center"></div>
+                <button type="button" class="outline_btn" onclick="addGenre()">Add Genre</button>
+                <br>
 
                 <label for="lang">
                     <select id="lang" name="lang">
@@ -64,9 +60,10 @@
                         <option>bn</option>
                     </select>
                 </label><br>
-                <%var tags = []; var word;%>
+
                 Chapters:
-                <div id="chapters" style="display: flex; justify-content: center; flex-direction: column; align-self: center">
+                <div id="chapters"
+                     style="display: flex; justify-content: center; flex-direction: column; align-self: center">
 
                 </div>
                 <button type="button" class="outline_btn" onclick="addChapter()">Add Chapter</button><br>
@@ -95,15 +92,29 @@
         resetForm();
 
         selectedDivision = that.value;
-        if(that.value === 'literature'){
+        if (that.value === 'literature') {
             catDiv.style.display = 'block';
-        }
-        else {
+        } else {
             catDiv.style.display = 'none';
         }
     }
 
-    function getTag(){
+    function addGenre() {
+        const template = `
+        <select  id="genre" name="genre">
+                        <% for (var i = 0; i < genre.length; i++) { %>
+                        <option value="<%= genre[i]._id %>"> <%= genre[i].name %> </option>
+                        <% } %>
+                    </select>
+        `
+
+        const genre_container = document.getElementById('genre-container');
+        const genre_div = document.createElement('div');
+        genre_div.innerHTML = template;
+        genre_container.appendChild(genre_div);
+    }
+
+    function getTag() {
 
         const tagContainer = document.getElementById('tag-container');
         const tagElement = document.createElement('input');

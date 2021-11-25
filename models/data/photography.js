@@ -22,7 +22,7 @@ const photoSchema = new Schema({
         default: "Photography"
     },
     genre: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         required: true
     },
     ratings: {

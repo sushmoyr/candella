@@ -139,11 +139,11 @@ const getModelFromDivision = division => {
     if (division === Divisions.literature) {
         return require('../models/data/literature');
     } else if (division === Divisions.journal) {
-        return require('../models/data/literature');
+        return require('../models/data/journal');
     } else if (division === Divisions.comic) {
-        return require('../models/data/literature');
-    } else if (division === Divisions.comic) {
-        return require('../models/data/literature');
+        return require('../models/data/comics');
+    } else if (division === Divisions.photography) {
+        return require('../models/data/photography');
     } else {
         return null;
     }

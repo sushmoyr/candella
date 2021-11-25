@@ -6,7 +6,8 @@ const {Divisions} = require("../../utils/Constants");
 
 const comicSchema = new Schema({
     author: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     title: {
         type: String,
@@ -26,8 +27,9 @@ const comicSchema = new Schema({
         default: Divisions.comic
     },
     genre: {
-        type: Schema.Types.ObjectId,
-        required: true
+        type: [Schema.Types.ObjectId],
+        required: true,
+        ref: "genre"
     },
     lang: {
         type: String,

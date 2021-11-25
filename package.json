@@ -11,7 +11,7 @@
     "startm": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ex Machina",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",

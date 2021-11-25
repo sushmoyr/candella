@@ -6,7 +6,6 @@ const {
     pagination,
     sortArrayByKey
 } = require("../../utils/helpers");
-const {textChapter} = require("../../models/data/chapter");
 
 //TODO: Check endpoint
 const addChapter = async (req, res) => {

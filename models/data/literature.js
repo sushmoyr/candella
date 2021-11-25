@@ -33,7 +33,7 @@ const literatureSchema = new Schema({
         required: true
     },
     genre: {
-       type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         required: true,
         ref: "genre"
     },

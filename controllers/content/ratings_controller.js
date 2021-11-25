@@ -12,9 +12,9 @@ const addRating = async (req, res) => {
     const postId = req.params.id;
     const userId = req.user.id;
     const {division, dataId} = await getSingleMix(postId, false);
+    console.log({division, dataId})
     const filter = {
         _id: dataId,
-        author: userId
     }
     const rating = {
         by: userId,
@@ -26,6 +26,7 @@ const addRating = async (req, res) => {
         return sendErrorResponse(res, 404, "Division not found");
 
     await model.findOneAndUpdate(filter, {$push: {ratings: rating}}, {new: true}).exec().then(data => {
+        console.log(data);
         return sendSuccessResponse(res, data.ratings[data.ratings.length - 1], "Rating Added");
     }).catch(err => {
         return sendErrorResponse(res, 404, `post not found. ${err}`);
@@ -33,8 +34,6 @@ const addRating = async (req, res) => {
 
 
 };
-
-//TODO: Check endpoint
 
 const getRatings = async (req, res) => {
     const postId = req.params.id;
@@ -46,14 +45,6 @@ const getRatings = async (req, res) => {
     const options = {
         ratings: {$slice: [skip, limit]}
     }
-
-    /*const fields = req.query['excludes'].split('_');
-    let excludes = '';
-    for (const field of fields) {
-        excludes += `-${field} `;
-    }
-
-    console.log(excludes);*/
 
     const model = getModelFromDivision(division);
 
@@ -125,8 +116,6 @@ const updateRating = async (req, res) => {
         sendErrorResponse(res, 404, `Error ${e}`);
     }
 };
-
-//TODO: Check endpoint
 
 const deleteRating = async (req, res) => {
     const {id, ratingId} = req.params;

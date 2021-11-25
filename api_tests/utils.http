@@ -1,6 +1,13 @@
 GET {{host}}/api/v1/utils/genre
+Accept: application/json
+
+###
+POST {{host}}/api/v1/utils/genre
 Content-Type: application/json
 
+{
+  "name": "Action"
+}
 
 ###
 PUT {{host}}/api/v1/utils/category/618f887e9eae23e89d729ffd

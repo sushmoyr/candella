@@ -24,7 +24,7 @@ const journalSchema = new Schema({
         type: String
     },
     genre: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         required: true,
         ref: "genre"
     },

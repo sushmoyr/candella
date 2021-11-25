@@ -7,14 +7,12 @@ const {
     sortArrayByKey
 } = require("../../utils/helpers");
 
-//TODO: Check endpoint
 const addThought = async (req, res) => {
     const postId = req.params.id;
     const userId = req.user.id;
     const {division, dataId} = await getSingleMix(postId, false);
     const filter = {
         _id: dataId,
-        author: userId
     }
     const thoughts = {
         by: userId,
@@ -32,8 +30,6 @@ const addThought = async (req, res) => {
     })
 };
 
-
-//TODO: Check endpoint
 
 const getAllThought = async (req, res) => {
     const postId = req.params.id;
@@ -53,6 +49,10 @@ const getAllThought = async (req, res) => {
         return sendErrorResponse(res, 404, "Division not found");
 
     await model.findOne(filter)
+        .populate({
+            path: 'thoughts.by',
+            select: "_id name profileImage"
+        })
         .exec().then(data => {
             const result = sortArrayByKey(data.thoughts, sortBy, order);
             return sendSuccessResponse(res, result);
@@ -60,8 +60,6 @@ const getAllThought = async (req, res) => {
             return sendErrorResponse(res, 404, "Not found");
         })
 };
-
-//TODO: Check endpoint
 
 const getThought = async (req, res) => {
     const {id, thoughtId} = req.params;
@@ -77,6 +75,10 @@ const getThought = async (req, res) => {
         return sendErrorResponse(res, 404, "Division Not Found");
 
     await model.findOne(filter)
+        .populate({
+            path: 'thoughts.by',
+            select: "_id name profileImage"
+        })
         .exec()
         .then(data => {
             for (const thought of data.thoughts) {
@@ -90,8 +92,6 @@ const getThought = async (req, res) => {
 
 };
 
-
-//TODO: Check endpoint
 
 const updateThought = async (req, res) => {
     const {id, thoughtId} = req.params;
@@ -126,8 +126,6 @@ const updateThought = async (req, res) => {
     }
 };
 
-
-//TODO: Check endpoint
 
 const deleteThought = async (req, res) => {
     const {id, thoughtId} = req.params;
