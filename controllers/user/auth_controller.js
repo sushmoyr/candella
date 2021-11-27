@@ -1,15 +1,15 @@
-const User = require('../models/data/user');
-const Error = require('../models/utils/error');
-const Success = require('../models/utils/success');
+const User = require('../../models/data/user');
+const Error = require('../../models/utils/error');
+const Success = require('../../models/utils/success');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const {blockToken} = require("../utils/token_manager");
+const {blockToken} = require("../../utils/token_manager");
 
 
 exports.register = async (req, res) => {
     //TODO: validate data
     let {name, email, password} = req.body;
-    if (name && email && password){
+    if (name && email && password) {
         password = await hashPassword(password);
         await User.create({
             name: name,

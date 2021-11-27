@@ -14,4 +14,8 @@ router.post('/follow/:id', verifyToken, userController.followUser);
 
 router.post('/unfollow/:id', verifyToken, userController.unfollowUser);
 
+router.post('/save/:id', verifyToken, userController.savePost);
+
+router.get('/save', verifyToken, userController.getSavedPosts);
+
 module.exports = router;

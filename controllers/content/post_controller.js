@@ -204,7 +204,6 @@ const getSingleLiterature = async (id) => {
 }
 
 
-
 /**
  * Journal Block for journal type
  * post's crud operations
@@ -478,10 +477,15 @@ const getSingleMix = async (id, populate = true) => {
     }
 }
 
-const getMixed = async (req) => {
+const getMixed = async (req, dataIds = []) => {
     const {skip, limit, sortBy, order} = pagination(req);
+
+    const filter = (dataIds.length > 0)
+        ? {dataId: {$in: dataIds}}
+        : {};
+
     try {
-        return await MixedContents.find()
+        return await MixedContents.find(filter)
             .select('-_id -__v')
             .skip(skip).limit(limit)
             .sort([[sortBy, order]])

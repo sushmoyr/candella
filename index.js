@@ -47,6 +47,9 @@ app.use('/api/v1/u', routes.userRoutes);
 app.use('/api/v1/utils', routes.utilsRoutes);
 app.use('/api/v1/c', routes.postRoutes);
 app.use('/dev/api', routes.docRoutes);
+app.use('*', (req, res) => {
+    res.status(404).json({code: 404, message: "Invalid Route."})
+})
 
 //view routes
 app.use(userViewRoute);

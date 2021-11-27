@@ -1,4 +1,4 @@
-const {loginUser, registerUser, hashPassword} = require("../controllers/auth_controller");
+const {loginUser, registerUser, hashPassword} = require("../controllers/user/auth_controller");
 const router = require('express').Router();
 const Error = require('../models/utils/error');
 const Success = require('../models/utils/success');

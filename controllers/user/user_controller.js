@@ -1,7 +1,9 @@
-const User = require('../models/data/user');
-const Error = require('../models/utils/error');
-const Success = require('../models/utils/success');
-const {pagination} = require("../utils/helpers");
+const User = require('../../models/data/user');
+const Error = require('../../models/utils/error');
+const Success = require('../../models/utils/success');
+const {pagination} = require("../../utils/helpers");
+const {getMixed} = require("../content/post_controller");
+const {normalizeMix} = require("../../utils/helpers");
 
 //update user data
 exports.updateUser = async (req, res) => {
@@ -131,16 +133,6 @@ exports.unfollowUser = async (req, res) => {
             return res.status(401).json(new Error(401, "You are not following this user!!!"));
         }
 
-        /*other.followers = other.followers.filter(function (value, index, arr) {
-            console.log(arr[index]);
-            console.log(self._id);
-            return value !== self._id;
-        })
-
-        self.following = self.following.filter(function (value, index, arr) {
-            return value !== other._id;
-        })*/
-
         other.followers.pull({_id: self._id});
         self.following.pull({_id: other._id});
 
@@ -151,6 +143,46 @@ exports.unfollowUser = async (req, res) => {
 
         return res.status(201).json(new Success(201, "Successfully Unfollowed"));
 
+    } catch (e) {
+        return res.status(500).json(new Error(500, `Error: ${e}`));
+    }
+}
+
+//save/bookmark
+exports.savePost = async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(
+            req.user.id,
+            {
+                $addToSet: {
+                    savedPosts: req.params.id
+                }
+            },
+            {new: true}
+        ).exec().then(data => {
+            return res.status(200).json(new Success(200, "Post saved successfully.", data.savedPosts));
+        }).catch(e => {
+            return res.status(500).json(new Error(500, `Error: ${e}`));
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.getSavedPosts = async (req, res) => {
+    try {
+        const {savedPosts} = await User.findById(req.user.id);
+        let result = await getMixed(req, savedPosts);
+
+        if (result instanceof Error)
+            return res.status(result.code).json(result);
+
+        if (req.query['excludes']) {
+            console.log('excludes = ' + req.query['excludes']);
+            result = normalizeMix(req.query['excludes'], result);
+        }
+
+        res.status(200).json(result);
     } catch (e) {
         return res.status(500).json(new Error(500, `Error: ${e}`));
     }
