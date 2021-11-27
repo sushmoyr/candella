@@ -1,5 +1,7 @@
 const User = require('../models/data/user');
 const Error = require('../models/utils/error');
+const Success = require('../models/utils/success');
+const {pagination} = require("../utils/helpers");
 
 //update user data
 exports.updateUser = async (req, res) => {
@@ -18,10 +20,8 @@ exports.updateUser = async (req, res) => {
 //get user data from token
 exports.getCurrentUser = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
-        const {_doc} = user;
-        const {password, ...other} = _doc;
-        res.status(200).json(other);
+        const user = await getUser(req.user.id, (req.query['populate'] === '1'));
+        res.status(200).json(user);
     } catch (e) {
         res.status(500)
             .json(new Error(500, `Error: ${e}`));
@@ -31,36 +31,127 @@ exports.getCurrentUser = async (req, res) => {
 //get user data from id
 exports.getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
-        const {_doc} = user;
-        const {password, ...other} = _doc;
-        res.status(200).json(other);
+        const user = await getUser(req.params.id);
+        res.status(200).json(user);
+    } catch (e) {
+        res.status(500)
+            .json(new Error(500, `Error: ${e}`));
+    }
+}
+
+const getUser = async (id, populate = false) => {
+    try {
+        const population = (populate)
+            ? [
+                {
+                    path: 'following',
+                    select: '_id name profileImage'
+                },
+                {
+                    path: 'followers',
+                    select: '_id name profileImage'
+                }
+            ]
+            : []
+        return await User.findById(id).select('-password').populate(population);
+    } catch (e) {
+        throw e;
+    }
+}
+
+//get list of users
+exports.getAllUsers = async (req, res) => {
+    //pagination
+    const {skip, limit, sortBy, order} = pagination(req);
+
+    try {
+        const data = await User.find().select('-password').skip(skip).limit(limit).sort([[sortBy, order]]);
+        res.status(200).json(data);
     } catch (e) {
         res.status(500)
             .json(new Error(500, "There was an error"));
     }
 }
 
-//get list of users
-exports.getAllUsers = async (req, res) => {
-    const pageNo = (req.query['page']) ? req.query['page'] : 1;
-    const sortBy = (req.query['sort_by']) ? req.query['sort_by'] : 'createdAt';
-    const order = (req.query['order']) ? req.query['order'] : 'asc';
-
-    //pagination
-    const {skip, limit} = sortPage(pageNo);
-
+//Follow user
+exports.followUser = async (req, res) => {
     try {
-        const data = await User.find().select('-password').skip(skip).limit(limit).sort([[sortBy, order]]);
-        res.status(200).json(data);
-    } catch (e){
-        res.status(500)
-            .json(new Error(500, "There was an error"));
+        if (req.user.id === req.params.id) {
+            return res.status(401).json(new Error(401, "You can't follow yourself"));
+        }
+
+        const self = await getUser(req.user.id);
+        const other = await getUser(req.params.id);
+
+        if (!other.followers)
+            other.followers = [];
+
+        if (!self.follwers)
+            self.follwers = [];
+
+
+        if (other.followers && other.followers.includes(self._id)) {
+            return res.status(401).json(new Error(401, "You are already following this user!!!"));
+        }
+
+        if (self.following && self.following.includes(self._id)) {
+            return res.status(401).json(new Error(401, "You are already following this user!!!"));
+        }
+
+
+        other.followers.push(self._id);
+        self.following.push(other._id);
+
+        await Promise.all([
+            other.save().then(data => {
+                console.log(JSON.stringify(data, null, 4))
+            }),
+            self.save().then(data => {
+                console.log(JSON.stringify(data, null, 4))
+            })
+        ]);
+
+        return res.status(201).json(new Success(201, "Successfully Followed"));
+    } catch (e) {
+        return res.status(500).json(new Error(500, `Error: ${e}`));
     }
 }
 
-const sortPage = pageNo => {
-    const limit = process.env.page_limit * 1;
-    const skip = (pageNo - 1) * limit;
-    return {skip, limit};
+//Unfollow user
+exports.unfollowUser = async (req, res) => {
+    try {
+        if (req.user.id === req.params.id) {
+            return res.status(401).json(new Error(401, "You can't unfollow yourself"));
+        }
+
+        let self = await getUser(req.user.id);
+        let other = await getUser(req.params.id);
+
+        if (!other.followers.includes(self._id)) {
+            return res.status(401).json(new Error(401, "You are not following this user!!!"));
+        }
+
+        /*other.followers = other.followers.filter(function (value, index, arr) {
+            console.log(arr[index]);
+            console.log(self._id);
+            return value !== self._id;
+        })
+
+        self.following = self.following.filter(function (value, index, arr) {
+            return value !== other._id;
+        })*/
+
+        other.followers.pull({_id: self._id});
+        self.following.pull({_id: other._id});
+
+        await Promise.all([
+            other.save(),
+            self.save()
+        ]);
+
+        return res.status(201).json(new Success(201, "Successfully Unfollowed"));
+
+    } catch (e) {
+        return res.status(500).json(new Error(500, `Error: ${e}`));
+    }
 }

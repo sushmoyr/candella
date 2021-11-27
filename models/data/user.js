@@ -42,14 +42,34 @@ const userSchema = new Schema({
         default: 'Not Specified'
     },
     following: {
-        type: [Schema.Types.ObjectId]
+        type: [Schema.Types.ObjectId],
+        default: [],
+        ref: "User"
     },
-    followers: {
-        type: [Schema.Types.ObjectId]
+        followers: {
+            type: [Schema.Types.ObjectId],
+            default: [],
+            ref: "User"
+        },
+        birthdate: {
+            type: Date
+        },
     },
-    birthdate: {
-        type: Date
-    },
-}, {timestamps: true});
+    {
+        timestamps: true,
+        toJSON: {virtuals: true},
+        toObject: {virtuals: true}
+    });
+
+userSchema.virtual('totalFollowers').get(function () {
+    const followers = this.followers;
+    return (followers) ? followers.length : 0;
+});
+
+userSchema.virtual('totalFollowing').get(function () {
+    const following = this.following;
+    return (following) ? following.length : 0;
+});
+
 
 module.exports = model('User', userSchema);

@@ -48,7 +48,7 @@ const getAllThought = async (req, res) => {
     if (model === null)
         return sendErrorResponse(res, 404, "Division not found");
 
-    await model.findOne(filter)
+    await model.findOne(filter, options)
         .populate({
             path: 'thoughts.by',
             select: "_id name profileImage"

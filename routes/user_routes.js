@@ -10,5 +10,8 @@ router.get('/info/:id', verifyToken, userController.getUserById);
 
 router.get('/all', userController.getAllUsers);
 
+router.post('/follow/:id', verifyToken, userController.followUser);
+
+router.post('/unfollow/:id', verifyToken, userController.unfollowUser);
 
 module.exports = router;
