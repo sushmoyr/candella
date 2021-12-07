@@ -2,13 +2,13 @@
   "name": "candella",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "engines": {
     "node": "12.x"
   },
   "scripts": {
     "start": "node index.js",
-    "startm": "nodemon index.js"
+    "startm": "nodemon ./src/index.js"
   },
   "keywords": [],
   "author": "Ex Machina",
