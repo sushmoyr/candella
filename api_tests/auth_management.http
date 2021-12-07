@@ -3,7 +3,7 @@ Accept: application/json
 
 ###
 
-POST http://localhost:8080/api/v1/u/login
+POST http://localhost:8080/api/v2/login
 Content-Type: application/json
 
 {
@@ -22,13 +22,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/v1/u/create
+POST http://localhost:8080/api/v2/create
 Content-Type: application/json
 
 {
   "name": "Ex Machina",
-  "email": "papataco@gmail.com",
-  "password": "123456"
+  "email": "v2fmail@gmail.com",
+  "password": "12345"
 }
 
 ###

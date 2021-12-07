@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const cookie_parser = require('cookie-parser');
 const cors = require('cors');
 //Local Module's Imports
-
+const Routes = require('./api/routes/index');
+const {StatusCodes} = require("./api/helpers/Constants");
 //configs
 const app = express();
 dotenv.config();
@@ -17,6 +18,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
+
+Routes.buildRoutes(app)
+
 
 //DB connection
 mongoose.connect(process.env.DB_URL)
