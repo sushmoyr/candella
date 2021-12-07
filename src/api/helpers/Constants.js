@@ -1,6 +1,18 @@
 const ModelNames = {
     USER: 'User',
-    CONTENT: 'Content'
+    CONTENT: 'Content',
+    CATEGORY: 'Category',
+    GENRE: 'Genre'
+}
+
+const Category = {
+    STORY: 'Story',
+    NOVEL: 'Novel',
+    POEM: 'Poem',
+    DRAMA: 'Drama',
+    COMIC: 'Comic',
+    JOURNAL: 'Journal',
+    PHOTOGRAPHY: 'Photography'
 }
 
 const Genders = {
@@ -157,5 +169,6 @@ module.exports = {
     Limits,
     Defaults,
     StatusCodes,
-    StatusPhrase
+    StatusPhrase,
+    Category
 }

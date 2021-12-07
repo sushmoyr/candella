@@ -1,34 +1,13 @@
-GET {{host}}/api/v1/utils/genre
+GET http://localhost:8080/api/v2/types/genre/61afe24255f6a5f68d03b5d3
 Accept: application/json
 
 ###
-POST {{host}}/api/v1/utils/genre
+POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Action"
+  "name": "Sci-Fi",
+  "categoryName": "df"
 }
-
-###
-PUT {{host}}/api/v1/utils/category/618f887e9eae23e89d729ffd
-Content-Type: application/json
-
-{
-  "categoryName": "Drama",
-  "divisionName": "Literature"
-}
-
-###
-POST {{host}}/api/v1/utils/category
-Content-Type: application/json
-
-{
-  "categoryName": "test1",
-  "divisionName": "division1"
-}
-
-###
-GET http://localhost:8080/api/v1/utils/category
-Accept: application/json
 
 ###
