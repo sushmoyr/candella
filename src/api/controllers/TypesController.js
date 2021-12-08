@@ -39,12 +39,12 @@ const getCategories = async (req, res) => {
 }
 
 const createGenre = async (req, res) => {
-    const {name, categoryName} = req.body;
+    const {name, category} = req.body;
 
-    const isValid = TypesValidator.validateCategory(categoryName);
+    const isValid = TypesValidator.validateCategory(category);
 
     if (isValid) {
-        await TypesService.createGenre(name, categoryName)
+        await TypesService.createGenre(name, category)
             .then(data => {
                 const success = new Success({
                     code: StatusCodes.CREATED,

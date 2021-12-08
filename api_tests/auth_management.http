@@ -7,8 +7,8 @@ POST http://localhost:8080/api/v2/login
 Content-Type: application/json
 
 {
-  "email": "cat@gmail.com",
-  "password": "123456"
+  "email": "emasfsdfdsfil@exampm",
+  "password": "123"
 }
 
 ###
@@ -26,9 +26,9 @@ POST http://localhost:8080/api/v2/create
 Content-Type: application/json
 
 {
-  "name": "Ex Machina",
-  "email": "v2fmail@gmail.com",
-  "password": "12345"
+  "name": "Full 2Name",
+  "email": "email@example.com",
+  "password": "123"
 }
 
 ###

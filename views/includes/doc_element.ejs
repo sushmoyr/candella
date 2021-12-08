@@ -30,7 +30,7 @@
     <% if (data.description) { %>
     <h1>Description</h1>
     <div class="paragraph">
-        <%= data.description %>
+        <%- data.description %>
     </div>
     <% } %>
 
@@ -50,13 +50,17 @@
     <% } %>
 
     <% if (data.query && data.query.length > 0) { %>
-    <h1>Query</h1>
-    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.query, null, 2)) %></pre>
-    <%}%>
+        <h1>Query</h1>
+        <pre class="json"><%- syntaxHighlight(JSON.stringify(data.query, null, 2)) %></pre>
+    <% } %>
 
-
-    <%if (data.response) {%>
+    <% if (data.response) { %>
     <h1>Response</h1>
-    <pre class="json"><%-syntaxHighlight(JSON.stringify(data.response, null, 2))%></pre>
-    <%}%>
+    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.response, null, 2)) %></pre>
+    <% } %>
+
+    <% if (data.error) { %>
+    <h1>Error</h1>
+    <pre class="json"><%- syntaxHighlight(JSON.stringify(data.error, null, 2)) %></pre>
+    <% } %>
 </div>

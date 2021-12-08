@@ -1,6 +1,13 @@
 const {Category} = require("../helpers");
-exports.validateCategory = (cat) => {
-    const categories = Object.keys(Category);
+const {getCategories, getCategory} = require("../services/TypesService");
 
-    return categories.includes(cat.toUpperCase());
+exports.validateCategory = async (id) => {
+    await getCategory(id)
+        .then(data => {
+            console.log('Cat data ', data);
+            return !!data;
+        }).catch(e => {
+            console.log('Cat err ', e);
+            return false;
+        })
 }

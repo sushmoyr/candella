@@ -16,9 +16,8 @@ const docSchema = new Schema({
     params: Schema.Types.Mixed,
     query: Schema.Types.Mixed,
     headers: Schema.Types.Mixed,
-    response: {
-        type: Schema.Types.Mixed
-    }
+    response: Schema.Types.Mixed,
+    error: Schema.Types.Mixed
 })
 
-module.exports = model('docs', docSchema);
+module.exports = model('documentation', docSchema);

@@ -6,8 +6,9 @@ const genreSchema = new Schema({
         type: String,
         required: true
     },
-    categoryName: {
-        type: String,
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: ModelNames.CATEGORY,
         required: true
     }
 });
