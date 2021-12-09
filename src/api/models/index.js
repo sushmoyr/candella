@@ -6,8 +6,9 @@ const Reason = require('./Reason');
 const User = require('./User');
 const Category = require('./Category');
 const Genre = require('./Genre');
+const DocumentSnapshot = require('./DocumentSnapshot');
 
 module.exports = {
-    Error, Success, Reason,
+    Error, Success, Reason, DocumentSnapshot,
     User, Category, Genre
 }

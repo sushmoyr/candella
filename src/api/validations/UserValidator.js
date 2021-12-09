@@ -1,4 +1,4 @@
-const {Patterns} = require("../helpers");
+const {Patterns, Genders} = require("../helpers");
 const {Reason} = require("../models");
 const {Limits} = require("../helpers");
 const {UserService} = require("../services");
@@ -76,4 +76,31 @@ const validatePassword = (password) => {
     }
 
     return {err, validPass};
+}
+
+exports.validateUserData = (data) => {
+    let isValid = true;
+    const errors = [];
+
+    if (data.name && !Patterns.name.test(data.name)) {
+        errors.push(new Reason('name', 'Invalid Name'));
+        isValid = false;
+    }
+
+    if (data.email && !Patterns.email.test(data.email)) {
+        errors.push(new Reason('email', 'Email isn\'t supported'));
+        isValid = false
+    }
+
+    if (data.bio && data.bio.length > Limits.MAX_BIO_LENGTH) {
+        isValid = false;
+        errors.push(new Reason('bio', `Bio must be within ${Limits.MAX_BIO_LENGTH} characters.`));
+    }
+
+    if (data.gender && !Object.values(Genders).includes(data.gender)) {
+        errors.push(new Reason('gender', 'Gender isn\'t supported'));
+        isValid = false
+    }
+
+    return {isValid, errors};
 }

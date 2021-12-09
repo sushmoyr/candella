@@ -7,8 +7,8 @@ POST http://localhost:8080/api/v2/login
 Content-Type: application/json
 
 {
-  "email": "emasfsdfdsfil@exampm",
-  "password": "123"
+  "email": "email@example.com",
+  "password": "123abcAB2"
 }
 
 ###
