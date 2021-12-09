@@ -81,20 +81,73 @@ const getAllUsers = async (req, res) => {
 };
 
 const followUser = async (req, res) => {
+    const by = req.user.id;
+    const to = req.params.id;
 
+    const snapshot = await UserService.followUser(by, to);
+
+    console.log('follow ', snapshot);
+
+    let response;
+    if (snapshot.hasData) {
+        response = new Success({
+            code: snapshot.code,
+            message: "Successfully Followed."
+        });
+    } else {
+        response = new Error({
+            code: snapshot.code,
+            message: snapshot.error
+        });
+    }
+
+    res.status(response.code).json(response)
 };
 
 const unfollowUser = async (req, res) => {
+    const by = req.user.id;
+    const to = req.params.id;
 
+    const snapshot = await UserService.unfollowUser(by, to);
+
+    let response;
+    if (snapshot.hasData) {
+        response = new Success({
+            code: snapshot.code,
+            message: "Successfully Unfollowed."
+        });
+    } else {
+        response = new Error({
+            code: snapshot.code,
+            message: snapshot.error
+        });
+    }
+
+    res.status(response.code).json(response)
 };
 
 const savePost = async (req, res) => {
+    const snapshot = await UserService.saveContent(req.user.id, req.params.id);
 
+    res.status(snapshot.code).json(snapshot)
 };
 
 const getSavedPosts = async (req, res) => {
+    const snapshot = await UserService.getSavedPosts(req.user.id);
 
+    let response;
+    if (snapshot.hasData) {
+        response = snapshot.data
+    } else {
+        response = new Error({
+            code: snapshot.code,
+            message: snapshot.error
+        });
+    }
+
+    res.status(snapshot.code).json(response);
 };
+
 
 module.exports = {
     updateUser, getCurrentUser, getUserById, getAllUsers, followUser, unfollowUser, savePost, getSavedPosts

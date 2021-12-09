@@ -1,9 +1,28 @@
+GET http://localhost:8080/api/v2/u/save
+Accept: application/json
+token: {{token}}
+
+###
+POST http://localhost:8080/api/v2/u/unfollow/619140ea8b19f6044c1fb7d9
+Content-Type: application/json
+token: {{token}}
+
+{}
+
+###
+POST http://localhost:8080/api/v2/u/follow/619140ea8b19f6044c1fb7d9
+Content-Type: application/json
+token: {{token}}
+
+{}
+
+###
 ###GET All Users
 GET http://localhost:8080/api/v2/u?include=name_email
 Accept: application/json
 
 ###GET User By ID
-GET http://localhost:8080/api/v2/u/info/6192abad78924c95b7e6e0f8
+GET http://localhost:8080/api/v2/u/info/
 Accept: application/json
 token: {{token}}
 

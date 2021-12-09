@@ -88,10 +88,153 @@ const getAll = async (filter = null, select = null, option = null) => {
     }
 }
 
+const followUser = async (by, to) => {
+    let self, other, snapshot;
+
+    await Promise.all([
+        self = addToSet(by, {following: to}),
+        other = addToSet(to, {followers: by}),
+    ]).then(data => {
+        const result1 = data[0];
+        const result2 = data[1];
+
+        if (result1.hasData && result2.hasData) {
+            snapshot = new DocumentSnapshot({
+                code: StatusCodes.OK,
+                data: {
+                    followedBy: by,
+                    followed: to
+                }
+            });
+        } else {
+            let err = '';
+            if (result1.hasError)
+                err += result1.error
+            if (result2.hasError)
+                err += result2.error
+
+            const error = new DocumentSnapshot({
+                code: StatusCodes.BAD_REQUEST,
+                error: err
+            })
+
+            console.log({error});
+            snapshot = error;
+        }
+    });
+
+    return snapshot;
+}
+
+const unfollowUser = async (by, to) => {
+    await Promise.all([
+        removeFromSet(by, {following: to}),
+        removeFromSet(to, {followers: by}),
+    ])
+}
+
+const addToSet = async (id, update) => {
+    try {
+        const updated = await User.findByIdAndUpdate(
+            id,
+            {
+                $addToSet: update
+            },
+            {new: true});
+
+        if (updated)
+            return new DocumentSnapshot({
+                code: StatusCodes.OK,
+                data: updated
+            });
+        else {
+            return new DocumentSnapshot({
+                code: StatusCodes.BAD_REQUEST,
+                error: "An error has occurred"
+            });
+        }
+    } catch (e) {
+
+        return new DocumentSnapshot({
+            code: StatusCodes.BAD_REQUEST,
+            error: e
+        });
+    }
+}
+
+const removeFromSet = async (id, update) => {
+    try {
+        const removed = await User.findByIdAndUpdate(
+            id,
+            {
+                $pull: update
+            },
+            {new: true}
+        );
+
+        console.log({removed})
+
+        if (removed)
+            return new DocumentSnapshot({
+                code: StatusCodes.OK,
+                data: removed
+            });
+        else {
+            return new DocumentSnapshot({
+                code: StatusCodes.BAD_REQUEST,
+                error: "An error has occurred"
+            });
+        }
+    } catch (e) {
+        console.log('error unfollow ', e);
+
+        return new DocumentSnapshot({
+            code: StatusCodes.BAD_REQUEST,
+            error: e
+        });
+    }
+}
+
 const findUser = async (filter, select) => {
-    const user = await User.findOne(filter, select);
-    console.log(user);
-    return user;
+    return User.findOne(filter, select);
+}
+
+const saveContent = async (id, contentId) => {
+    try {
+        const added = await addToSet(id, {savedPosts: contentId});
+        if (added) {
+            return new Success({
+                code: StatusCodes.OK,
+                message: "Successfully Saved..!",
+                body: added
+            })
+        } else {
+            return new Error({
+                code: StatusCodes.BAD_REQUEST,
+                message: "There was an error"
+            });
+        }
+    } catch (e) {
+        return new Error({
+            code: StatusCodes.BAD_REQUEST,
+            message: "There was an error. " + e
+        });
+    }
+}
+
+const getSavedPosts = async (id) => {
+    try {
+        const data = await findUser({_id: id}, "savedPosts");
+        return new DocumentSnapshot({
+            code: 200,
+            data: data['savedPosts']
+        })
+    } catch (e) {
+        return new DocumentSnapshot({
+            code: StatusCodes.BAD_REQUEST,
+            error: e
+        });
+    }
 }
 
 module.exports = {
@@ -99,5 +242,9 @@ module.exports = {
     createUser,
     updateById,
     getById,
-    getAll
+    getAll,
+    followUser,
+    unfollowUser,
+    saveContent,
+    getSavedPosts
 }
