@@ -13,7 +13,7 @@ _**To be added soon**_
 
 ## Documentation
 
-_**To be added soon**_
+_**Documentation update at website. [View Documentation Here.](https://candella.herokuapp.com)**_
 
 ## Screenshots
 
