@@ -1,5 +1,7 @@
 const {User, Success, Error, DocumentSnapshot} = require("../models");
-const {StatusCodes} = require("../helpers");
+const {StatusCodes, Notification_Types} = require("../helpers");
+const {dispatchNotification} = require("./NotificationService");
+
 
 const createUser = async (name, email, password) => {
     return User.create({
@@ -52,11 +54,11 @@ const updateById = async (id, data) => {
     return snapshot;
 }
 
-const getById = async (id) => {
+const getById = async (id, shouldPopulate) => {
     const filter = {_id: id};
 
     try {
-        const user = await findUser(filter, '-password -__v');
+        const user = await findUser(filter, '-password -__v', shouldPopulate);
         return (user) ?
             new DocumentSnapshot({
                 code: StatusCodes.OK,
@@ -75,7 +77,8 @@ const getById = async (id) => {
 
 const getAll = async (filter = null, select = null, option = null) => {
     try {
-        const users = await User.find(filter, select, option);
+        const users = await User.find(filter, select, option)
+            .sort([[option.sortBy, option.order]]);
         return new DocumentSnapshot({
             code: StatusCodes.OK,
             data: users
@@ -89,16 +92,17 @@ const getAll = async (filter = null, select = null, option = null) => {
 }
 
 const followUser = async (by, to) => {
-    let self, other, snapshot;
+    let snapshot, self, other;
 
     await Promise.all([
-        self = addToSet(by, {following: to}),
-        other = addToSet(to, {followers: by}),
+        addToSet(by, {following: to}),
+        addToSet(to, {followers: by}),
     ]).then(data => {
-        const result1 = data[0];
-        const result2 = data[1];
+        self = data[0];
+        other = data[1];
 
-        if (result1.hasData && result2.hasData) {
+        if (self.hasData && other.hasData) {
+
             snapshot = new DocumentSnapshot({
                 code: StatusCodes.OK,
                 data: {
@@ -108,10 +112,10 @@ const followUser = async (by, to) => {
             });
         } else {
             let err = '';
-            if (result1.hasError)
-                err += result1.error
-            if (result2.hasError)
-                err += result2.error
+            if (self.hasError)
+                err += self.error
+            if (other.hasError)
+                err += other.error
 
             const error = new DocumentSnapshot({
                 code: StatusCodes.BAD_REQUEST,
@@ -121,6 +125,8 @@ const followUser = async (by, to) => {
             console.log({error});
             snapshot = error;
         }
+    });
+    notifyFollower(self.data, other.data).then(r => {
     });
 
     return snapshot;
@@ -195,8 +201,23 @@ const removeFromSet = async (id, update) => {
     }
 }
 
-const findUser = async (filter, select) => {
-    return User.findOne(filter, select);
+const findUser = async (filter, select, shouldPopulate) => {
+
+    let populateOption = '';
+    if (shouldPopulate) {
+        populateOption = [
+            {
+                path: 'following',
+                select: '_id name profileImage pen_name'
+            },
+            {
+                path: 'followers',
+                select: '_id name profileImage pen_name'
+            }
+        ]
+    }
+
+    return User.findOne(filter, select).populate(populateOption);
 }
 
 const saveContent = async (id, contentId) => {
@@ -222,9 +243,19 @@ const saveContent = async (id, contentId) => {
     }
 }
 
-const getSavedPosts = async (id) => {
+const getSavedPosts = async (id, select = null, option, shouldPopulate = true) => {
+    let populateOption = '';
+    if (shouldPopulate) {
+        populateOption = [
+            {
+                path: 'savedPosts',
+            }
+        ]
+    }
+
     try {
-        const data = await findUser({_id: id}, "savedPosts");
+        //TODO: Saved Post selection option and pagination
+        const data = await findUser({_id: id}, "savedPosts.").populate(populateOption);
         return new DocumentSnapshot({
             code: 200,
             data: data['savedPosts']
@@ -235,6 +266,18 @@ const getSavedPosts = async (id) => {
             error: e
         });
     }
+}
+
+const notifyFollower = async (by, to) => {
+    await dispatchNotification({
+        owner: to._id,
+        message: `${by.name} has started following you.`,
+        type: Notification_Types.FOLLOWED_BY,
+        action: {
+            followerId: by._id
+        }
+    })
+    console.log('Notified')
 }
 
 module.exports = {

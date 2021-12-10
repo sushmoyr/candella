@@ -15,7 +15,19 @@ const includes = (req) => {
     }
 }
 
+const shouldPopulate = req => {
+    if (req.query['populate']) {
+        const p = req.query['populate'];
+        return (p === 'true' || p === '1');
+
+    } else {
+        return true;
+    }
+
+}
+
 module.exports = {
     pagination,
-    includes
+    includes,
+    shouldPopulate
 }

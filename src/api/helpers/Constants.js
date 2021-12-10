@@ -2,7 +2,10 @@ const ModelNames = {
     USER: 'User',
     CONTENT: 'Content',
     CATEGORY: 'Category',
-    GENRE: 'Genre'
+    GENRE: 'Genre',
+    CHAPTER: 'Chapter',
+    THOUGHTS: 'Thoughts',
+    NOTIFICATION: 'Notification'
 }
 
 const Category = {
@@ -24,12 +27,18 @@ const Genders = {
 const Limits = {
     MAX_PASSWORD_LENGTH: 32,
     MIN_PASSWORD_LENGTH: 8,
-    MAX_BIO_LENGTH: 120
+    MAX_BIO_LENGTH: 120,
+    MAX_CONTENT_DESCRIPTION_LENGTH: 300
+}
+
+const Notification_Types = {
+    FOLLOWED_BY: 'FOLLOWED_BY'
 }
 
 const Defaults = {
     DEFAULT_PROFILE_IMAGE_URL: '',
-    DEFAULT_COVER_IMAGE_URL: ''
+    DEFAULT_COVER_IMAGE_URL: '',
+    DEFAULT_CONTENT_COVER: ''
 }
 
 const StatusCodes = {
@@ -170,5 +179,6 @@ module.exports = {
     Defaults,
     StatusCodes,
     StatusPhrase,
-    Category
+    Category,
+    Notification_Types
 }

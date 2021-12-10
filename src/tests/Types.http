@@ -1,13 +1,315 @@
-GET http://localhost:8080/api/v2/types/genre
-Accept: application/json
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Food",
+  "category": "{{category}}"
+}
 
 ###
 POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Sci-Fi",
-  "category": "61afda37f402ce41f5d21bec"
+  "name": "Travel",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Health",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Fitness",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Lifestyle",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Fashion",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Beauty",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Photography",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Personal",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Music",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Business",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Finance",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Technology",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Programming",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Data Science",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Art",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Design",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Romance",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Sports",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Movie",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Politics",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "News",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Religion",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Marketing",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Development",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Education",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Gaming",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Science",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Space",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Mythology",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Medicine",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Animal",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Life",
+  "category": "{{category}}"
+}
+
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "Pet",
+  "category": "{{category}}"
 }
 
 ###

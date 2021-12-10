@@ -10,7 +10,7 @@ router.get('/category', TypesController.getCategories);
 
 router.post('/genre', TypesController.createGenre);
 
-router.get('/genre', TypesController.getGenres);
+router.get('/genres/:categoryId', TypesController.getGenresByCatID);
 
 router.get('/genre/:id', TypesController.getGenre)
 

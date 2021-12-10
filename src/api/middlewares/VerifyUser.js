@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
                     message: "Invalid token. Login to get a new token"
                 }));
             }
-            console.log("user is ", user);
+            //console.log("user is ", user);
             req.user = user;
             next();
         });
@@ -26,4 +26,4 @@ const verifyToken = async (req, res, next) => {
     }
 }
 
-module.exports = {verifyToken};
+module.exports = verifyToken;

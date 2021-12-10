@@ -39,22 +39,24 @@ const updateUser = async (req, res) => {
 
 const getCurrentUser = async (req, res) => {
     const id = req.user.id;
+    const shouldPopulate = QueryHelper.shouldPopulate(req);
 
-    const {code, result} = await getUser(id);
+    const {code, result} = await getUser(id, shouldPopulate);
 
     return res.status(code).json(result)
 };
 
 const getUserById = async (req, res) => {
     const id = req.params.id;
+    const shouldPopulate = QueryHelper.shouldPopulate(req);
 
-    const {code, result} = await getUser(id);
+    const {code, result} = await getUser(id, shouldPopulate);
 
     return res.status(code).json(result)
 };
 
-const getUser = async (id) => {
-    const snapshot = await UserService.getById(id);
+const getUser = async (id, shouldPopulate) => {
+    const snapshot = await UserService.getById(id, shouldPopulate);
 
     let result;
     if (snapshot.hasData)

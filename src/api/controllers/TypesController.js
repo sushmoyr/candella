@@ -100,6 +100,15 @@ const getGenre = async (req, res) => {
         });
 }
 
+const getGenresByCatID = async (req, res) => {
+    const {categoryId} = req.params;
+    await TypesService.getGenresByCatID(categoryId).then(data => {
+        res.status(StatusCodes.OK).json(data)
+    }).catch(e => {
+        res.status(StatusCodes.BAD_REQUEST).json(new Error({}))
+    })
+}
+
 module.exports = {
-    createCategory, getCategories, createGenre, getGenres, getGenre
+    createCategory, getCategories, createGenre, getGenres, getGenre, getGenresByCatID
 }
