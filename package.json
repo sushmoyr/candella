@@ -7,7 +7,7 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./src/index.js",
     "startm": "nodemon ./src/index.js"
   },
   "keywords": [],
