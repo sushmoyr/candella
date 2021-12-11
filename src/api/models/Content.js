@@ -35,28 +35,26 @@ const contentSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: ModelNames.CHAPTER
     },
-    totalChapter: {
-        type: Number
-    },
     averageRating: {
-        type: Number
+        type: Number,
+        default: 0
     },
-    thoughts: {
-        type: Schema.Types.ObjectId,
-        ref: ModelNames.THOUGHTS
-    },
-    totalThoughts: {
-        type: Schema.Types.Number
+    reviews: {
+        type: [Schema.Types.ObjectId],
+        ref: ModelNames.REVIEW
     },
     tags: {
         type: [String],
-        max: 16
+        maxlength: 16
     },
     views: {
         type: Number,
+        default: 0
     }
 }, {
     timestamps: true
 });
+
+//add totalReviews, totalChapters as virtuals
 
 module.exports = model(ModelNames.CONTENT, contentSchema);

@@ -8,9 +8,13 @@ const User = require('./User');
 const Category = require('./Category');
 const Genre = require('./Genre');
 const Content = require('./Content');
-const Notification = require('./Notification')
+const Notification = require('./Notification');
+const Rating = require('./Rating');
+const Review = require('./Review');
+const Chapter = require('./Chapter');
+const Thought = require('./Thoughts');
 
 module.exports = {
     Error, Success, Reason, DocumentSnapshot,
-    User, Category, Genre, Content, Notification
+    User, Category, Genre, Content, Notification, Rating, Review, Chapter, Thought
 }

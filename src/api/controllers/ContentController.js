@@ -91,6 +91,140 @@ const deleteContent = async (req, res) => {
     }));
 }
 
+//add chapter
+const addChapter = async (req, res) => {
+
+}
+
+//get chapter by id
+const getChapter = async (req, res) => {
+
+}
+
+//get all chapters
+const getChapters = async (req, res) => {
+
+}
+
+//update chapter
+const updateChapter = async (req, res) => {
+
+}
+
+//delete chapter by id
+const deleteChapter = async (req, res) => {
+
+}
+
+
+/* Review Data Section */
+//add review
+const addReview = async (req, res) => {
+    const author = req.user.id;
+    let data = req.body;
+    data.author = author;
+
+    const snapshot = await ContentService.createReview(data);
+
+    if (snapshot.hasData) {
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Successfully Created',
+            body: snapshot.data
+        }));
+    } else if (snapshot.hasError) {
+        return res.status(snapshot.code).json(new Error({
+            code: snapshot.code,
+            message: `Error: ${snapshot.error}`
+        }))
+    } else
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new Error({}));
+}
+
+//get single review
+const getReview = async (req, res) => {
+    const {reviewId} = req.params;
+    const snapshot = await ContentService.getSingleReview(reviewId);
+
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else {
+        const err = new Error({message: snapshot.error, code: snapshot.code})
+        return res.status(err.code).json(err);
+    }
+}
+
+//get all reviews
+const getReviews = async (req, res) => {
+    const {postId} = req.params;
+    const snapshot = await ContentService.getAllReviews(postId);
+
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else {
+        const err = new Error({message: snapshot.error, code: snapshot.code})
+        return res.status(err.code).json(err);
+    }
+}
+
+//edit review
+const updateReview = async (req, res) => {
+    const {reviewId} = req.params;
+    const snapshot = await ContentService.updateReview(reviewId, req.body);
+
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Review Successfully Updated',
+            body: snapshot.data
+        }));
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
+
+//delete review
+const deleteReview = async (req, res) => {
+    const {reviewId} = req.params;
+    const snapshot = await ContentService.deleteReview(reviewId);
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Review Successfully Deleted',
+            body: snapshot.data
+        }));
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
+
+/* Comment Data Section */
+//add comment to chapter
+
+//get comments of chapter
+
+//get single comment from chapter
+
+//edit comment of chapter
+
+//delete comment of chapter
+
+/* Rating Data Sections*/
+//add rating to chapter
+
+//get ratings of chapter
+
+//get rating from chapter
+
+//update rating
+
+//delete rating
+
+
 module.exports = {
-    createContent, readContent, readContents, updateContent, deleteContent
+    createContent, readContent, readContents, updateContent, deleteContent,
+    addChapter, getChapter, getChapters, updateChapter, deleteChapter,
+    addReview, getReview, getReviews, updateReview, deleteReview
 }

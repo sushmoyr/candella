@@ -1,7 +1,7 @@
 const {Schema, model} = require('mongoose');
 const {ModelNames} = require("../helpers");
 
-const thoughtSchema = new Schema({
+const reviewSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: ModelNames.USER
@@ -10,9 +10,13 @@ const thoughtSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: ModelNames.CONTENT
     },
-    value: {
+    text: {
+        type: String,
+        max: 100
+    },
+    attachment: {
         type: String
     }
 }, {timestamps: true});
 
-module.exports = model(ModelNames.THOUGHT, thoughtSchema);
+module.exports = model(ModelNames.REVIEW, reviewSchema);

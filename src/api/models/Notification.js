@@ -3,7 +3,8 @@ const {ModelNames} = require("../helpers");
 
 const notification = new Schema({
     owner: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: ModelNames.USER
     },
     message: {
         type: String
@@ -11,7 +12,7 @@ const notification = new Schema({
     type: {
         type: String,
     },
-    action: {
+    data: {
         type: Schema.Types.Mixed
     }
 })

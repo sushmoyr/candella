@@ -4,8 +4,10 @@ const ModelNames = {
     CATEGORY: 'Category',
     GENRE: 'Genre',
     CHAPTER: 'Chapter',
-    THOUGHTS: 'Thoughts',
-    NOTIFICATION: 'Notification'
+    THOUGHT: 'Thought',
+    NOTIFICATION: 'Notification',
+    REVIEW: 'Review',
+    RATING: "Rating"
 }
 
 const Category = {
@@ -32,7 +34,8 @@ const Limits = {
 }
 
 const Notification_Types = {
-    FOLLOWED_BY: 'FOLLOWED_BY'
+    FOLLOWED_BY: 'FOLLOWED_BY',
+    REVIEWED_BY: 'REVIEWED_BY'
 }
 
 const Defaults = {

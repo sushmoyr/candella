@@ -1,5 +1,7 @@
-const {Content, DocumentSnapshot} = require("../models");
-const {StatusCodes} = require("../helpers");
+const {Content, DocumentSnapshot, Review} = require("../models");
+const {StatusCodes, Notification_Types} = require("../helpers");
+const {NotificationService} = require("./index");
+
 const createContent = async (content) => {
     try {
         const newContent = await Content.create({...content})
@@ -29,16 +31,19 @@ const contentPopulationConfig = [
     {
         path: 'author',
         select: '_id email name pen_name profileImage coverImage'
-    }/*, TODO register chapter Schema
+    },
     {
         path: 'chapters',
         select: '_id, name'
-    }*/
+    }
 ]
 
-const getSingleContent = async (filter, populate = contentPopulationConfig) => {
+const getSingleContent = async (filter, shouldPopulate = true, updateViewCount = true) => {
+    const populate = (shouldPopulate) ? contentPopulationConfig : {};
+    const increment = (updateViewCount) ? 1 : 0;
     try {
-        const data = await Content.findOne(filter).populate(populate);
+        const data = await Content.findOneAndUpdate(filter, {$inc: {views: increment}}, {new: true}).populate(populate);
+
         if (data)
             return createSnapshot(data);
         else
@@ -96,12 +101,133 @@ const deleteContent = async (postId, userId) => {
     }
 }
 
-const createSnapshot = data => {
+/* Review Section */
+const createReview = async (data) => {
+    try {
+        const review = await Review.create({...data});
+        console.log({review})
+        const contentSnapshot = await addToContentArray(data.contentId, 'reviews', review['_id']);
+        console.log({contentSnapshot});
+        if (contentSnapshot.hasError)
+            return contentSnapshot;
+        //dispatch notification
+        sendReviewNotification(review).then(r => console.log('notification sent')).catch(e => console.log(e));
+        //return
+        return createSnapshot(review);
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+
+}
+
+const sendReviewNotification = async (review) => {
+    const content = await getSingleContent({_id: review.contentId}, true, false);
+    const owner = content.data.author;
+
+    await __dispatchNotification({
+        owner: owner._id,
+        message: `${owner.name} reviewed your content ${content.data.title}`,
+        type: Notification_Types.REVIEWED_BY,
+        data: {
+            reviewBy: {...owner},
+            review: review
+        }
+    });
+}
+
+const getSingleReview = async (reviewId) => {
+    try {
+        const review = await Review.findOne({_id: reviewId}).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }]);
+
+        return (review)
+            ? createSnapshot(review, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
+const getAllReviews = async (postId) => {
+    try {
+        const reviews = await Review.find({contentId: postId}).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }])
+
+        console.log({reviews})
+
+        return (reviews)
+            ? createSnapshot(reviews, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
+const updateReview = async (id, updateData) => {
+    try {
+        const data = await Review.findOneAndUpdate({
+            _id: id
+        }, {$set: updateData}, {new: true});
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to edit this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
+const deleteReview = async (id) => {
+    try {
+        const data = await Review.findOneAndDelete({
+            _id: id
+        });
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to delete this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
+const addToContentArray = async (contentId, fieldName, updateData) => {
+    let config = {};
+    config[fieldName] = updateData
+    try {
+        const updated = await Content.findByIdAndUpdate(
+            contentId,
+            {
+                $addToSet: config
+            }, {new: true}
+        );
+
+        if (updated) {
+            return createSnapshot(updated)
+        } else {
+            return createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found.')
+        }
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
+const createSnapshot = (data, code = null) => {
     return new DocumentSnapshot({
-        code: StatusCodes.CREATED,
+        code: (code) ? code : StatusCodes.CREATED,
         data: data,
     })
 }
+
 
 const createErrorSnapshot = (code, error) => {
     return new DocumentSnapshot({
@@ -111,5 +237,6 @@ const createErrorSnapshot = (code, error) => {
 }
 
 module.exports = {
-    createContent, getSingleContent, getAllContents, updateContent, deleteContent
+    createContent, getSingleContent, getAllContents, updateContent, deleteContent,
+    createReview, getSingleReview, getAllReviews, updateReview, deleteReview
 }

@@ -2,12 +2,12 @@ const {Notification} = require('../models/index');
 const {DocumentSnapshot} = require("../models");
 const {StatusCodes} = require("../helpers");
 
-const dispatchNotification = async ({owner, message, type, action}) => {
+const dispatchNotification = async ({owner, message, type, data}) => {
     await Notification.create({
         owner: owner,
         message: message,
         type: type,
-        action: action
+        data: data
     }).then(data => {
         console.log('Notification Created..', data);
     }).catch(e => {
