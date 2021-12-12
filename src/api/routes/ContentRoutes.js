@@ -1,7 +1,13 @@
 const router = require('express').Router();
 
 const {ContentController} = require('../controllers');
-const {verifyToken, verifyPostOwner, validateContentData, updateContentRequest} = require("../middlewares");
+const {
+    verifyToken,
+    verifyPostOwner,
+    validateContentData,
+    updateContentRequest,
+    validateChapter
+} = require("../middlewares");
 
 /* Metadata Routes */
 //create content
@@ -20,17 +26,17 @@ router.put('/:id', verifyToken, validateContentData, updateContentRequest, Conte
 router.delete('/:id', verifyToken, ContentController.deleteContent);
 
 /* Chapter Data Routes */
-//add chapter
-router.post('/chapter', verifyToken, ContentController.addChapter);
+//add chapter*
+router.post('/chapter', verifyToken, validateChapter, ContentController.addChapter);
 
-//get chapter by id
+//get chapter by id *
 router.get('/chapter/:chapterId', verifyToken, ContentController.getChapter);
 
-//get chapters
+//get chapters*
 router.get('/chapters/:postId', verifyToken, ContentController.getChapters);
 
-//update chapter
-router.put('/chapter/:chapterId', verifyToken, ContentController.updateChapter);
+//update chapter*
+router.put('/chapter/:chapterId', verifyToken, validateChapter, ContentController.updateChapter);
 
 //delete chapter
 router.delete('/chapter/:chapterId', verifyToken, ContentController.deleteChapter)

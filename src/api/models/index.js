@@ -13,8 +13,22 @@ const Rating = require('./Rating');
 const Review = require('./Review');
 const Chapter = require('./Chapter');
 const Thought = require('./Thoughts');
+const {ModelNames} = require("../helpers");
+
+const SelectModel = (modelName) => {
+    if (modelName === ModelNames.CHAPTER) {
+        return Chapter
+    } else if (modelName === ModelNames.THOUGHT) {
+        return Thought
+    } else if (modelName === ModelNames.RATING) {
+        return Rating
+    } else if (modelName === ModelNames.REVIEW) {
+        return Review
+    }
+}
 
 module.exports = {
+    SelectModel,
     Error, Success, Reason, DocumentSnapshot,
     User, Category, Genre, Content, Notification, Rating, Review, Chapter, Thought
 }

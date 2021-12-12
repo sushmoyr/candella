@@ -1,4 +1,5 @@
-const {User, Success, Error, DocumentSnapshot} = require("../models");
+const {Success, Error, DocumentSnapshot} = require("../models");
+const User = require('../models/User');
 const {StatusCodes, Notification_Types} = require("../helpers");
 const {dispatchNotification} = require("./NotificationService");
 

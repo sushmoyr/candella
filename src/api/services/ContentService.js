@@ -1,6 +1,9 @@
-const {Content, DocumentSnapshot, Review} = require("../models");
+const Content = require('../models/Content');
+const DocumentSnapshot = require('../models/DocumentSnapshot');
+const Review = require('../models/Review');
+const Chapter = require('../models/Chapter');
 const {StatusCodes, Notification_Types} = require("../helpers");
-const {NotificationService} = require("./index");
+const {SelectModel} = require("../models");
 
 const createContent = async (content) => {
     try {
@@ -39,7 +42,7 @@ const contentPopulationConfig = [
 ]
 
 const getSingleContent = async (filter, shouldPopulate = true, updateViewCount = true) => {
-    const populate = (shouldPopulate) ? contentPopulationConfig : {};
+    const populate = (shouldPopulate) ? contentPopulationConfig : '';
     const increment = (updateViewCount) ? 1 : 0;
     try {
         const data = await Content.findOneAndUpdate(filter, {$inc: {views: increment}}, {new: true}).populate(populate);
@@ -199,6 +202,92 @@ const deleteReview = async (id) => {
     }
 }
 
+/* Chapter Section */
+
+//Create Chapter
+const createChapter = async (data) => {
+    try {
+        const chapter = await Chapter.create({...data});
+        //console.log({chapter})
+        const contentSnapshot = await addToContentArray(data.contentId, 'chapters', chapter['_id']);
+        //console.log({contentSnapshot});
+        if (contentSnapshot.hasError)
+            return contentSnapshot;
+        return createSnapshot(chapter);
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
+//get single chapter by id
+const getChapter = async (id) => {
+    try {
+        const chapter = await Chapter.findById(id).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }]);
+
+        return (chapter)
+            ? createSnapshot(chapter, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        console.log(e)
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
+//get all chapters
+const getChapters = async (postId) => {
+    try {
+        const chapters = await Chapter.find({contentId: postId}).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }])
+
+        console.log({chapters})
+
+        return (chapters)
+            ? createSnapshot(chapters, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
+//update a chapter
+const updateChapter = async (id, updateData) => {
+    try {
+        const data = await Chapter.findOneAndUpdate({
+            _id: id
+        }, {$set: updateData}, {new: true});
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to edit this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
+//delete a chapter by id
+const deleteChapter = async (id) => {
+    try {
+        const data = await Chapter.findByIdAndDelete({
+            _id: id
+        });
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to delete this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
 const addToContentArray = async (contentId, fieldName, updateData) => {
     let config = {};
     config[fieldName] = updateData
@@ -238,5 +327,6 @@ const createErrorSnapshot = (code, error) => {
 
 module.exports = {
     createContent, getSingleContent, getAllContents, updateContent, deleteContent,
-    createReview, getSingleReview, getAllReviews, updateReview, deleteReview
+    createReview, getSingleReview, getAllReviews, updateReview, deleteReview,
+    createChapter, getChapter, getChapters, updateChapter, deleteChapter
 }

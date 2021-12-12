@@ -1,0 +1,39 @@
+GET http://localhost:8080/api/v2/c/chapters/{{contentId}}
+Accept: application/json
+token: {{anotherToken}}
+
+###
+GET http://localhost:8080/api/v2/c/chapter/61b4ccb71ca90f6f7606df65
+Accept: application/json
+token: {{anotherToken}}
+
+###
+DELETE http://localhost:8080/api/v2/c/chapter/61b4ccb71ca90f6f7606df65
+Accept: application/json
+token: {{anotherToken}}
+
+###
+POST http://localhost:8080/api/v2/c/chapter
+Content-Type: application/json
+token: {{anotherToken}}
+
+{
+  "category" : "{{category}}",
+  "chapterName": "Chapter 3",
+  "contentId": "{{contentId}}",
+  "body": "Greeting 3 body"
+}
+
+###
+PUT http://localhost:8080/api/v2/c/chapter/61b4ccb71ca90f6f7606df65
+Content-Type: application/json
+token: {{anotherToken}}
+
+{
+  "category" : "{{category}}",
+  "chapterName": "Chapter 2 - A new title",
+  "contentId": "{{contentId}}",
+  "body": "The protagonist got a new title in this chapter"
+}
+
+###

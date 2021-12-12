@@ -25,10 +25,10 @@ Content-Type: application/json
 token: {{anotherToken}}
 
 {
-  "title": "Another Post",
-  "description": "Second Post Description",
+  "title": "Test Chapter Content 2",
+  "description": "This content is to test the chapter crud",
   "genre": ["61b33473f5d38171077b0ec0", "61b115a756a462337f5ecd5f"],
-  "category": "{{STORY}}"
+  "category": "{{category}}"
 }
 
 ###

@@ -19,14 +19,6 @@ const chapterSchema = new Schema({
     },
     body: {
         type: Schema.Types.Mixed
-    },
-    rating: {
-        type: [Schema.Types.ObjectId],
-        ref: ModelNames.RATING
-    },
-    thoughts: {
-        type: [Schema.Types.ObjectId],
-        ref: ModelNames.THOUGHT
     }
 }, {timestamps: true});
 
