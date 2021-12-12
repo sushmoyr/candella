@@ -1,0 +1,35 @@
+GET http://localhost:8080/api/v2/c/ratings/{{chapterId}}
+Accept: application/json
+token: {{anotherToken}}
+
+###
+GET http://localhost:8080/api/v2/c/rating/61b5ce8fb5b1d4eeea30aa34
+Accept: application/json
+token: {{anotherToken}}
+
+###
+DELETE http://localhost:8080/api/v2/c/rating/61b5ce8fb5b1d4eeea30aa34
+Accept: application/json
+token: {{anotherToken}}
+
+###
+POST http://localhost:8080/api/v2/c/rating
+Content-Type: application/json
+token: {{anotherToken}}
+
+{
+  "chapterId": "{{chapterId}}",
+  "value": "Waiting for the next one"
+}
+
+###
+PUT http://localhost:8080/api/v2/c/rating/61b5ce8fb5b1d4eeea30aa34
+Content-Type: application/json
+token: {{anotherToken}}
+
+{
+  "chapterId": "{{chapterId}}",
+  "value": "Awesome"
+}
+
+###

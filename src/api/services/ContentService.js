@@ -3,7 +3,7 @@ const DocumentSnapshot = require('../models/DocumentSnapshot');
 const Review = require('../models/Review');
 const Chapter = require('../models/Chapter');
 const {StatusCodes, Notification_Types} = require("../helpers");
-const {SelectModel} = require("../models");
+const {SelectModel, Thought, Rating} = require("../models");
 
 const createContent = async (content) => {
     try {
@@ -275,9 +275,7 @@ const updateChapter = async (id, updateData) => {
 //delete a chapter by id
 const deleteChapter = async (id) => {
     try {
-        const data = await Chapter.findByIdAndDelete({
-            _id: id
-        });
+        const data = await Chapter.findByIdAndDelete(id);
 
         if (data)
             return createSnapshot(data);
@@ -287,6 +285,153 @@ const deleteChapter = async (id) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
     }
 }
+
+/* Comment Data Section */
+//add comment to chapter
+const createThought = async (data) => {
+    try {
+        const thought = await Thought.create({...data});
+        return createSnapshot(thought);
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+//get comments of chapter
+const getThought = async (id) => {
+    try {
+        const thought = await Thought.findById(id).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }]);
+
+        return (thought)
+            ? createSnapshot(thought, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+//get single comment from chapter
+const getThoughts = async (chapterId) => {
+    try {
+        const thoughts = await Thought.find({chapterId: chapterId}).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }])
+
+        console.log({thoughts})
+
+        return (thoughts)
+            ? createSnapshot(thoughts, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+//edit comment of chapter
+const updateThought = async (id, updateData) => {
+    try {
+        const data = await Thought.findOneAndUpdate({
+            _id: id
+        }, {$set: updateData}, {new: true});
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to edit this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+//delete comment of chapter
+const deleteThought = async (id) => {
+    try {
+        const data = await Thought.findByIdAndDelete(id);
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to delete this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
+/* Rating Data Section */
+//add rating to chapter
+const createRating = async (data) => {
+    try {
+        const rating = await Rating.create({...data});
+        return createSnapshot(rating);
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+//get single rating of a chapter
+const getRating = async (id) => {
+    try {
+        const rating = await Rating.findById(id).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }]);
+
+        return (rating)
+            ? createSnapshot(rating, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+//get ratings from chapter
+const getRatings = async (chapterId) => {
+    try {
+        const ratings = await Rating.find({chapterId: chapterId}).populate([{
+            path: 'author',
+            select: '_id email name pen_name profileImage coverImage'
+        }])
+
+        console.log({ratings})
+
+        return (ratings)
+            ? createSnapshot(ratings, StatusCodes.OK)
+            : createErrorSnapshot(StatusCodes.NOT_FOUND, 'Content Not Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+//edit rating of chapter
+const updateRating = async (id, updateData) => {
+    try {
+        const data = await Rating.findOneAndUpdate({
+            _id: id
+        }, {$set: updateData}, {new: true});
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to edit this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+//delete rating of chapter
+const deleteRating = async (id) => {
+    try {
+        const data = await Rating.findByIdAndDelete(id);
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.UNAUTHORIZED, 'You don\' have permission to delete this content');
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
+    }
+}
+
 
 const addToContentArray = async (contentId, fieldName, updateData) => {
     let config = {};
@@ -328,5 +473,7 @@ const createErrorSnapshot = (code, error) => {
 module.exports = {
     createContent, getSingleContent, getAllContents, updateContent, deleteContent,
     createReview, getSingleReview, getAllReviews, updateReview, deleteReview,
-    createChapter, getChapter, getChapters, updateChapter, deleteChapter
+    createChapter, getChapter, getChapters, updateChapter, deleteChapter,
+    createThought, getThought, getThoughts, updateThought, deleteThought,
+    createRating, getRating, getRatings, updateRating, deleteRating
 }

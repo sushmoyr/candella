@@ -259,29 +259,168 @@ const deleteReview = async (req, res) => {
 
 /* Comment Data Section */
 //add comment to chapter
+const addThought = async (req, res) => {
+    const author = req.user.id;
+    let data = req.body;
+    data.author = author;
 
-//get comments of chapter
+    const snapshot = await ContentService.createThought(data);
 
-//get single comment from chapter
+    if (snapshot.hasData) {
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Successfully Created',
+            body: snapshot.data
+        }));
+    } else if (snapshot.hasError) {
+        return res.status(snapshot.code).json(new Error({
+            code: snapshot.code,
+            message: `Error: ${snapshot.error}`
+        }))
+    } else
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new Error({}));
 
+}
+//get single comment of chapter
+const getThought = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await ContentService.getThought(id);
+
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else {
+        const err = new Error({message: snapshot.error, code: snapshot.code})
+        return res.status(err.code).json(err);
+    }
+}
+//get comments from chapter
+const getThoughts = async (req, res) => {
+    const {chapterId} = req.params;
+    const snapshot = await ContentService.getThoughts(chapterId);
+
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else {
+        const err = new Error({message: snapshot.error, code: snapshot.code})
+        return res.status(err.code).json(err);
+    }
+}
 //edit comment of chapter
+const updateThought = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await ContentService.updateThought(id, req.body);
 
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Thought Successfully Updated',
+            body: snapshot.data
+        }));
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
 //delete comment of chapter
+const deleteThought = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await ContentService.deleteThought(id);
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Thought Successfully Deleted',
+            body: snapshot.data
+        }));
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
 
 /* Rating Data Sections*/
 //add rating to chapter
+const addRating = async (req, res) => {
+    const author = req.user.id;
+    let data = req.body;
+    data.author = author;
 
+    const snapshot = await ContentService.createRating(data);
+
+    if (snapshot.hasData) {
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Successfully Created',
+            body: snapshot.data
+        }));
+    } else if (snapshot.hasError) {
+        return res.status(snapshot.code).json(new Error({
+            code: snapshot.code,
+            message: `Error: ${snapshot.error}`
+        }))
+    } else
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new Error({}));
+
+}
 //get ratings of chapter
+const getRating = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await ContentService.getRating(id);
 
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else {
+        const err = new Error({message: snapshot.error, code: snapshot.code})
+        return res.status(err.code).json(err);
+    }
+}
 //get rating from chapter
+const getRatings = async (req, res) => {
+    const {chapterId} = req.params;
+    const snapshot = await ContentService.getRatings(chapterId);
 
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else {
+        const err = new Error({message: snapshot.error, code: snapshot.code})
+        return res.status(err.code).json(err);
+    }
+}
 //update rating
+const updateRating = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await ContentService.updateRating(id, req.body);
 
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Rating Successfully Updated',
+            body: snapshot.data
+        }));
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
 //delete rating
-
+const deleteRating = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await ContentService.deleteRating(id);
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(new Success({
+            code: snapshot.code,
+            message: 'Thought Successfully Deleted',
+            body: snapshot.data
+        }));
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
 
 module.exports = {
     createContent, readContent, readContents, updateContent, deleteContent,
     addChapter, getChapter, getChapters, updateChapter, deleteChapter,
-    addReview, getReview, getReviews, updateReview, deleteReview
+    addReview, getReview, getReviews, updateReview, deleteReview,
+    addThought, getThought, getThoughts, updateThought, deleteThought,
+    addRating, getRating, getRatings, updateRating, deleteRating
 }

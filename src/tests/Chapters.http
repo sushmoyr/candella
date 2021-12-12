@@ -19,9 +19,9 @@ token: {{anotherToken}}
 
 {
   "category" : "{{category}}",
-  "chapterName": "Chapter 3",
+  "chapterName": "Chapter 2 is here",
   "contentId": "{{contentId}}",
-  "body": "Greeting 3 body"
+  "body": "Greeting 2 body"
 }
 
 ###

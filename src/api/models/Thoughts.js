@@ -6,7 +6,7 @@ const thoughtSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: ModelNames.USER
     },
-    contentId: {
+    chapterId: {
         type: Schema.Types.ObjectId,
         ref: ModelNames.CONTENT
     },
