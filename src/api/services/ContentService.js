@@ -123,21 +123,6 @@ const createReview = async (data) => {
 
 }
 
-const sendReviewNotification = async (review) => {
-    const content = await getSingleContent({_id: review.contentId}, true, false);
-    const owner = content.data.author;
-
-    await __dispatchNotification({
-        owner: owner._id,
-        message: `${owner.name} reviewed your content ${content.data.title}`,
-        type: Notification_Types.REVIEWED_BY,
-        data: {
-            reviewBy: {...owner},
-            review: review
-        }
-    });
-}
-
 const getSingleReview = async (reviewId) => {
     try {
         const review = await Review.findOne({_id: reviewId}).populate([{
@@ -287,15 +272,18 @@ const deleteChapter = async (id) => {
 }
 
 /* Comment Data Section */
+
 //add comment to chapter
 const createThought = async (data) => {
     try {
         const thought = await Thought.create({...data});
+        sendThoughtNotification(thought).then(r => console.log('notification sent')).catch(e => console.log(e));
         return createSnapshot(thought);
     } catch (e) {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
     }
 }
+
 //get comments of chapter
 const getThought = async (id) => {
     try {
@@ -312,6 +300,7 @@ const getThought = async (id) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
     }
 }
+
 //get single comment from chapter
 const getThoughts = async (chapterId) => {
     try {
@@ -330,6 +319,7 @@ const getThoughts = async (chapterId) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
     }
 }
+
 //edit comment of chapter
 const updateThought = async (id, updateData) => {
     try {
@@ -345,6 +335,7 @@ const updateThought = async (id, updateData) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
     }
 }
+
 //delete comment of chapter
 const deleteThought = async (id) => {
     try {
@@ -359,16 +350,20 @@ const deleteThought = async (id) => {
     }
 }
 
+
 /* Rating Data Section */
+
 //add rating to chapter
 const createRating = async (data) => {
     try {
         const rating = await Rating.create({...data});
+        sendRatingNotification(rating).then(r => console.log('notification sent')).catch(e => console.log(e));
         return createSnapshot(rating);
     } catch (e) {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
     }
 }
+
 //get single rating of a chapter
 const getRating = async (id) => {
     try {
@@ -385,6 +380,7 @@ const getRating = async (id) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
     }
 }
+
 //get ratings from chapter
 const getRatings = async (chapterId) => {
     try {
@@ -403,6 +399,7 @@ const getRatings = async (chapterId) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
     }
 }
+
 //edit rating of chapter
 const updateRating = async (id, updateData) => {
     try {
@@ -418,6 +415,7 @@ const updateRating = async (id, updateData) => {
         return createErrorSnapshot(StatusCodes.BAD_REQUEST, e)
     }
 }
+
 //delete rating of chapter
 const deleteRating = async (id) => {
     try {
@@ -432,6 +430,70 @@ const deleteRating = async (id) => {
     }
 }
 
+/* Notification Block */
+//TODO: Check Notification Block
+
+const sendReviewNotification = async (review) => {
+    const content = await getSingleContent({_id: review.contentId}, true, false);
+    const owner = content.data.author;
+
+    if (owner._id.toString() === review.author.toString())
+        return;
+
+    await __dispatchNotification({
+        owner: owner._id,
+        message: `${owner.name} reviewed your content ${content.data.title}`,
+        type: Notification_Types.REVIEWED_BY,
+        data: {
+            reviewBy: {...owner},
+            review: review
+        }
+    });
+}
+
+const sendRatingNotification = async (rating) => {
+    const chapter = await getChapter(rating.author.toString());
+    if (chapter.hasData) {
+        const content = await getSingleContent({_id: chapter.data.author});
+        const owner = content.data.author;
+
+        if (owner._id.toString() === rating.author.toString())
+            return;
+
+        await __dispatchNotification({
+            owner: owner._id,
+            message: `${owner.name} Rated your content ${content.data.title}`,
+            type: Notification_Types.RATED_BY,
+            data: {
+                ratedBy: {...owner},
+                rating: rating
+            }
+        });
+    }
+}
+
+const sendThoughtNotification = async (thought) => {
+    const chapter = await getChapter(thought.author.toString());
+    if (chapter.hasData) {
+        const content = await getSingleContent({_id: chapter.data.author});
+        const owner = content.data.author;
+
+        if (owner._id.toString() === thought.author.toString())
+            return;
+
+        await __dispatchNotification({
+            owner: owner._id,
+            message: `${owner.name} Commented on your content ${content.data.title}`,
+            type: Notification_Types.RATED_BY,
+            data: {
+                ratedBy: {...owner},
+                rating: thought
+            }
+        });
+    }
+}
+
+/* Random Service Helpers */
 
 const addToContentArray = async (contentId, fieldName, updateData) => {
     let config = {};

@@ -35,7 +35,8 @@ const Limits = {
 
 const Notification_Types = {
     FOLLOWED_BY: 'FOLLOWED_BY',
-    REVIEWED_BY: 'REVIEWED_BY'
+    REVIEWED_BY: 'REVIEWED_BY',
+    RATED_BY: 'RATED_BY'
 }
 
 const Defaults = {

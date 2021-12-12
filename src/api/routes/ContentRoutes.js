@@ -74,19 +74,19 @@ router.put('/thought/:id', verifyToken, ContentController.updateThought);
 router.delete('/thought/:id', verifyToken, ContentController.deleteThought)
 
 /* Rating Data Routes*/
-//add rating to chapter
+//add rating to chapter*
 router.post('/rating', verifyToken, ContentController.addRating);
 
-//get ratings of chapter
+//get ratings of chapter*
 router.get('/ratings/:chapterId', ContentController.getRatings);
 
-//get rating from chapter
+//get rating from chapter*
 router.get('/rating/:id', ContentController.getRating);
 
-//update rating
+//update rating*
 router.put('/rating/:id', verifyToken, ContentController.updateRating);
 
-//delete rating
+//delete rating*
 router.delete('/rating/:id', verifyToken, ContentController.deleteRating)
 
 
