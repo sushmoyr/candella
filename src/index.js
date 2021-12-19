@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cookie_parser = require('cookie-parser');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 //Local Module's Imports
 const Routes = require('./api/routes/index');
 const {StatusCodes} = require("./api/helpers/Constants");
@@ -21,6 +22,8 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'res')));
+global.__baseDir = path.join(__dirname, 'res');
+app.use(fileUpload({}));
 
 Routes.buildRoutes(app);
 
