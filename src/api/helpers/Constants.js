@@ -40,9 +40,9 @@ const Notification_Types = {
 }
 
 const Defaults = {
-    DEFAULT_PROFILE_IMAGE_URL: '',
-    DEFAULT_COVER_IMAGE_URL: '',
-    DEFAULT_CONTENT_COVER: ''
+    DEFAULT_PROFILE_IMAGE_URL: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+    DEFAULT_COVER_IMAGE_URL: 'https://i.ibb.co/n3LL7Vn/default-cover.png',
+    DEFAULT_CONTENT_COVER: 'https://i.ibb.co/KX8j15H/defult-content-cover.png'
 }
 
 const StatusCodes = {
