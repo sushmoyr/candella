@@ -417,10 +417,23 @@ const deleteRating = async (req, res) => {
     }));
 }
 
+//Featured Post
+const featured = async (req, res) => {
+    const snapshot = await ContentService.featured();
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+
+}
+
 module.exports = {
     createContent, readContent, readContents, updateContent, deleteContent,
     addChapter, getChapter, getChapters, updateChapter, deleteChapter,
     addReview, getReview, getReviews, updateReview, deleteReview,
     addThought, getThought, getThoughts, updateThought, deleteThought,
-    addRating, getRating, getRatings, updateRating, deleteRating
+    addRating, getRating, getRatings, updateRating, deleteRating,
+    featured
 }

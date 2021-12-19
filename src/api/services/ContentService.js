@@ -532,10 +532,31 @@ const createErrorSnapshot = (code, error) => {
     });
 }
 
+//Featured
+const featured = async () => {
+    console.log(Number(process.env.featured_limit))
+    const select = '-__v';
+    try {
+        const data = await Content.find()
+            .sort([['views', 'desc']])
+            .limit(Number(process.env.featured_limit))
+            .populate(contentPopulationConfig);
+        console.log(data);
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.NOT_FOUND, 'No Content Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
 module.exports = {
     createContent, getSingleContent, getAllContents, updateContent, deleteContent,
     createReview, getSingleReview, getAllReviews, updateReview, deleteReview,
     createChapter, getChapter, getChapters, updateChapter, deleteChapter,
     createThought, getThought, getThoughts, updateThought, deleteThought,
-    createRating, getRating, getRatings, updateRating, deleteRating
+    createRating, getRating, getRatings, updateRating, deleteRating,
+    featured
 }

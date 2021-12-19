@@ -87,7 +87,10 @@ router.get('/rating/:id', ContentController.getRating);
 router.put('/rating/:id', verifyToken, ContentController.updateRating);
 
 //delete rating*
-router.delete('/rating/:id', verifyToken, ContentController.deleteRating)
+router.delete('/rating/:id', verifyToken, ContentController.deleteRating);
+
+//Feature Post
+router.get('/featured/all', ContentController.featured);
 
 
 module.exports = router
