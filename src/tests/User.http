@@ -18,7 +18,7 @@ token: {{token}}
 
 ###
 ###GET All Users
-GET http://localhost:8080/api/v2/u?include=name_email
+GET http://localhost:8080/api/v2/u
 Accept: application/json
 
 ###GET User By ID
@@ -27,7 +27,7 @@ Accept: application/json
 token: {{token}}
 
 ###GET Authenticated User
-GET http://localhost:8080/api/v2/u/info?populate=true
+GET http://localhost:8080/api/v2/u/info
 Accept: application/json
 token: {{token}}
 

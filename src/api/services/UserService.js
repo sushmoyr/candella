@@ -59,7 +59,7 @@ const getById = async (id, shouldPopulate) => {
     const filter = {_id: id};
 
     try {
-        const user = await findUser(filter, '-password -__v', shouldPopulate);
+        const user = await findUser(filter, '-password -__v', 1);
         return (user) ?
             new DocumentSnapshot({
                 code: StatusCodes.OK,
