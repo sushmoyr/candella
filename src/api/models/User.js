@@ -17,8 +17,7 @@ const userSchema = new Schema({
         max: Limits.MAX_PASSWORD_LENGTH
     },
     phone: {
-        type: String,
-        unique: true
+        type: String
     },
     profileImage: {
         type: String,
@@ -53,16 +52,12 @@ const userSchema = new Schema({
         ref: ModelNames.USER
     },
     birthdate: {
-        type: Date
+        type: String
     },
     savedPosts: {
         type: [Schema.Types.ObjectId],
         default: [],
         ref: ModelNames.CONTENT
-    },
-    blockList: {
-        type: [Schema.Types.ObjectId],
-        ref: ModelNames.USER
     }
 }, {
     timestamps: true,
@@ -72,16 +67,6 @@ const userSchema = new Schema({
     toObject: {
         virtuals: true
     }
-});
-
-userSchema.virtual('totalFollowers').get(function () {
-    const followers = this.followers;
-    return (followers) ? followers.length : 0;
-});
-
-userSchema.virtual('totalFollowing').get(function () {
-    const following = this.following;
-    return (following) ? following.length : 0;
 });
 
 

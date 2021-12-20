@@ -17,8 +17,8 @@ POST http://localhost:8080/api/v2/login
 Content-Type: application/json
 
 {
-  "email": "another@example.com",
-  "password": "123another"
+  "email": "fscott@candella.com",
+  "password": "{{adminPass}}"
 }
 
 ###
@@ -26,9 +26,12 @@ POST http://localhost:8080/api/v2/create
 Content-Type: application/json
 
 {
-  "name": "Another User",
-  "email": "another@example.com",
-  "password": "123another"
+  "name": "F Scott Fitzgerald",
+  "email": "fscott@candella.com",
+  "password": "{{adminPass}}"
 }
 
-###
+###Admin User Data
+#Name: F. Scott Fitzgerald
+#Email: fscott_at_candella.com
+#Password: 404AdminPass

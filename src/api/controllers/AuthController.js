@@ -32,6 +32,7 @@ const register = async (req, res) => {
                     body: {name, email}
                 }))
         }).catch(err => {
+            console.log(err)
             const error = Error.default();
             res.status(error.code).json(error);
         });
