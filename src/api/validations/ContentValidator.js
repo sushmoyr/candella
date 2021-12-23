@@ -69,7 +69,7 @@ const validate = async (content) => {
     if (isValid) {
 
         const result = await isGenresInCategory(category, genre);
-
+        console.log('checking genre');
         isValid = result.isValid;
         errors = result.errors;
     }

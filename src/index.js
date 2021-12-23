@@ -16,7 +16,7 @@ const app = express();
 dotenv.config();
 
 const corsOptions = {
-    origin: process.env.ORIGIN || "https://localhost:8080"
+    origin: '*'
 }
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));

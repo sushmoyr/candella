@@ -26,13 +26,18 @@ Accept: application/json
 ###
 POST http://localhost:8080/api/v2/c
 Content-Type: application/json
-token: {{anotherToken}}
+token: {{token}}
 
 {
-  "title": "Test Chapter Content 2",
-  "description": "This content is to test the chapter crud",
-  "genre": ["61b33473f5d38171077b0ec0", "61b115a756a462337f5ecd5f"],
-  "category": "{{category}}"
+  "title": "client",
+  "description": "first post",
+  "genre": [
+    "61b33474f5d38171077b0ec3",
+    "61b33474f5d38171077b0ecf",
+    "61b33474f5d38171077b0ec6"
+  ],
+  "category": "61afda37f402ce41f5d21bec",
+  "coverImage": "http://localhost:8080/uploads/1640261766072.jpg"
 }
 
 ###
