@@ -12,6 +12,7 @@ const updateUser = async (req, res) => {
     const {isValid, errors} = UserValidator.validateUserData(data);
 
     if (isValid) {
+
         const snapshot = await UserService.updateById(id, data);
 
         if (snapshot.hasData) {
