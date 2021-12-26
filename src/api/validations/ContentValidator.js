@@ -26,9 +26,6 @@ const isGenresInCategory = async (category, genres) => {
     }
 
     const genresOfCategory = await TypesService.getGenresByCatID(category);
-    console.log({genresOfCategory})
-    console.log('Size ', genresOfCategory.length);
-    console.log({genres});
 
     for (const genre of genres) {
         const match = genresOfCategory.some(g => {
