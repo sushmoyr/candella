@@ -1,3 +1,5 @@
+
+
 const {Patterns, Genders} = require("../helpers");
 const {Reason} = require("../models");
 const {Limits} = require("../helpers");
@@ -103,4 +105,31 @@ exports.validateUserData = (data) => {
     }
 
     return {isValid, errors};
+}
+
+exports.validateAuthInfo = info => {
+    const {email, oldPassword, newPassword} = info;
+    let isValid = false;
+    const errors = [];
+
+    const {err, validPass} = validatePassword(newPassword);
+    if (validPass){
+        isValid = true;
+        if (email && !Patterns.email.test(email)) {
+            errors.push(new Reason('email', 'Email isn\'t supported'));
+            isValid = false
+        }
+    } else {
+        errors.push(...err);
+    }
+
+    return {isValid, errors};
+}
+
+exports.isValidEmail = email => {
+    return Patterns.email.test(email);
+}
+
+exports.isValidPassword = password => {
+    return validatePassword(password);
 }
