@@ -2,7 +2,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Food",
+  "name": "Wedding",
   "category": "{{category}}"
 }
 
@@ -11,7 +11,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Travel",
+  "name": "Event",
   "category": "{{category}}"
 }
 
@@ -20,7 +20,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Health",
+  "name": "Portrait",
   "category": "{{category}}"
 }
 
@@ -29,7 +29,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Fitness",
+  "name": "Product",
   "category": "{{category}}"
 }
 
@@ -38,7 +38,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Lifestyle",
+  "name": "Fine Art",
   "category": "{{category}}"
 }
 
@@ -56,7 +56,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Beauty",
+  "name": "Architectural",
   "category": "{{category}}"
 }
 
@@ -65,7 +65,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Photography",
+  "name": "Travel",
   "category": "{{category}}"
 }
 
@@ -74,7 +74,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Personal",
+  "name": "Aerial",
   "category": "{{category}}"
 }
 
@@ -83,7 +83,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Music",
+  "name": "Lifestyle",
   "category": "{{category}}"
 }
 
@@ -92,7 +92,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Business",
+  "name": "Pet",
   "category": "{{category}}"
 }
 
@@ -101,7 +101,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Finance",
+  "name": "Nature",
   "category": "{{category}}"
 }
 
@@ -110,7 +110,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Technology",
+  "name": "Night",
   "category": "{{category}}"
 }
 
@@ -119,7 +119,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Programming",
+  "name": "Monochromatic",
   "category": "{{category}}"
 }
 
@@ -128,7 +128,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Electronics",
+  "name": "Digital Art",
   "category": "{{category}}"
 }
 
@@ -137,7 +137,7 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Data Science",
+  "name": "Painting",
   "category": "{{category}}"
 }
 
@@ -155,7 +155,15 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Design",
+  "name": "Abstract",
+  "category": "{{category}}"
+}
+###
+POST http://localhost:8080/api/v2/types/genre
+Content-Type: application/json
+
+{
+  "name": "City",
   "category": "{{category}}"
 }
 
@@ -164,152 +172,6 @@ POST http://localhost:8080/api/v2/types/genre
 Content-Type: application/json
 
 {
-  "name": "Romance",
+  "name": "Street",
   "category": "{{category}}"
 }
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Sports",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Movie",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Politics",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "News",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Religion",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Marketing",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Development",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Education",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Gaming",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Science",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Space",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Mythology",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Medicine",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Animal",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Life",
-  "category": "{{category}}"
-}
-
-###
-POST http://localhost:8080/api/v2/types/genre
-Content-Type: application/json
-
-{
-  "name": "Pet",
-  "category": "{{category}}"
-}
-
-###
