@@ -13,23 +13,12 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/api/v2/update
-Content-Type: application/json
-token: {{scott}}
-
-{
-  "password": "123NewPass",
-  "newPassword": "{{adminPass}}"
-}
-
-###
-
 POST http://localhost:8080/api/v2/login
 Content-Type: application/json
 
 {
   "email": "fscottM@candella.com",
-  "password": "123NewPass"
+  "password": "{{adminPass}}"
 }
 
 ###

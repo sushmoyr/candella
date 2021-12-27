@@ -3,6 +3,7 @@ const {ContentService, UserService} = require("../services");
 const {Success, Error} = require("../models");
 const {StatusCodes, QueryHelper} = require("../helpers");
 const createContent = async (req, res) => {
+    console.log('Create Content');
     const contentData = req.body;
     const snapshot = await ContentService.createContent(contentData);
 

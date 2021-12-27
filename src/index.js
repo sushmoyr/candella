@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cookie_parser = require('cookie-parser');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const morgan = require('morgan');
 //Local Module's Imports
 const Routes = require('./api/routes/index');
 const {StatusCodes} = require("./api/helpers/Constants");
@@ -18,6 +19,7 @@ dotenv.config();
 const corsOptions = {
     origin: '*'
 }
+app.use(morgan('dev', {}));
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
