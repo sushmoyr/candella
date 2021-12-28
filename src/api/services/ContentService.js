@@ -25,11 +25,9 @@ const createContent = async (content) => {
 const contentPopulationConfig = [
     {
         path: 'genre',
-        select: '_id, name'
     },
     {
         path: 'category',
-        select: '_id, name'
     },
     {
         path: 'author',
@@ -146,7 +144,7 @@ const getAllReviews = async (postId) => {
             select: '_id email name pen_name profileImage coverImage'
         }])
 
-        console.log({reviews})
+        //console.log({reviews})
 
         return (reviews)
             ? createSnapshot(reviews, StatusCodes.OK)

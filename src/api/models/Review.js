@@ -14,9 +14,6 @@ const reviewSchema = new Schema({
         type: String,
         max: 100
     },
-    attachment: {
-        type: String
-    }
 }, {timestamps: true});
 
 module.exports = model(ModelNames.REVIEW, reviewSchema);
