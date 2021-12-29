@@ -35,7 +35,10 @@ const contentPopulationConfig = [
     },
     {
         path: 'chapters',
-        select: '_id, name'
+        select: '_id, chapterName'
+    },
+    {
+        path: 'reviews'
     }
 ]
 

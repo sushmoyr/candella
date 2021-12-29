@@ -20,7 +20,7 @@ token: {{token}}
 }
 
 ###
-GET http://localhost:8080/api/v2/c/61cb5b29af9f0c009b80331b
+GET http://localhost:8080/api/v2/c
 Accept: application/json
 
 ###
