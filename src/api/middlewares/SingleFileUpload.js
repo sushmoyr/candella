@@ -14,7 +14,7 @@ const singleFileUpload = async (req, res, next) => {
     const dir = path.join(__baseDir, 'uploads', name);
 
     await file.mv(dir).then(v=>{
-        req.imageLink = `${process.env.host}/uploads/${name}`;
+        req.imageLink = `/uploads/${name}`;
         next();
     })
 }
