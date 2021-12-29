@@ -25,9 +25,11 @@ const createContent = async (content) => {
 const contentPopulationConfig = [
     {
         path: 'genre',
+        select: '-__v'
     },
     {
         path: 'category',
+        select: '-__v'
     },
     {
         path: 'author',
@@ -38,7 +40,8 @@ const contentPopulationConfig = [
         select: '_id, chapterName'
     },
     {
-        path: 'reviews'
+        path: 'reviews',
+        select: '-__v'
     }
 ]
 
