@@ -40,9 +40,9 @@ const Notification_Types = {
 }
 
 const Defaults = {
-    DEFAULT_PROFILE_IMAGE_URL: `${process.env.host}/images/avatar.png`,
-    DEFAULT_COVER_IMAGE_URL: 'https://i.ibb.co/n3LL7Vn/default-cover.png',
-    DEFAULT_CONTENT_COVER: 'https://i.ibb.co/KX8j15H/defult-content-cover.png'
+    DEFAULT_PROFILE_IMAGE_URL: `/images/avatar.png`,
+    DEFAULT_COVER_IMAGE_URL: '/images/default_cover.png',
+    DEFAULT_CONTENT_COVER: '/images/default_content_cover.png'
 }
 
 const StatusCodes = {

@@ -59,6 +59,10 @@ const contentSchema = new Schema({
 //add totalReviews, totalChapters as virtuals
 contentSchema.virtual('averageRating').get(function (){
     return 0;
-})
+});
+
+contentSchema.virtual('totalReviews').get(function (){
+    return this.reviews.length;
+});
 
 module.exports = model(ModelNames.CONTENT, contentSchema);

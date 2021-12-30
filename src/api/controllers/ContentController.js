@@ -42,8 +42,9 @@ const readContent = async (req, res) => {
 }
 //read multiple content
 const readContents = async (req, res) => {
-    const options = QueryHelper.pagination(req)
-    const snapshot = await ContentService.getAllContents(null, options);
+    const options = QueryHelper.pagination(req);
+    const filter = QueryHelper.filter(req);
+    const snapshot = await ContentService.getAllContents(filter, options);
 
     console.log({snapshot});
 
