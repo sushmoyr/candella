@@ -4,7 +4,7 @@ const Review = require('../models/Review');
 const Chapter = require('../models/Chapter');
 const {StatusCodes, Notification_Types} = require("../helpers");
 const {SelectModel, Thought, Rating} = require("../models");
-const {UserService} = require("./index");
+const UserService = require("./UserService");
 
 const createContent = async (content) => {
     try {
