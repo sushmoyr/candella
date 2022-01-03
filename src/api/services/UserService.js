@@ -218,7 +218,7 @@ const findUser = async (filter, select, shouldPopulate) => {
         ]
     }
 
-    return User.findOne(filter, select).populate(populateOption);
+    return User.findOne(filter, select);
 }
 
 const saveContent = async (id, contentId) => {

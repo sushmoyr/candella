@@ -10,9 +10,9 @@ token: {{token}}
 {}
 
 ###
-POST http://localhost:8080/api/v2/u/follow/619140ea8b19f6044c1fb7d9
+POST http://localhost:8080/api/v2/u/follow/61c9b80c01533377503e27fe
 Content-Type: application/json
-token: {{token}}
+token: {{scott}}
 
 {}
 
@@ -22,14 +22,14 @@ GET http://localhost:8080/api/v2/u
 Accept: application/json
 
 ###GET User By ID
-GET http://localhost:8080/api/v2/u/info/619140ea8b19f6044c1fb7d9?populate=1
+GET http://localhost:8080/api/v2/u/info/61c887df8e1d5504ad7dbb4f
 Accept: application/json
 token: {{token}}
 
 ###GET Authenticated User
 GET http://localhost:8080/api/v2/u/info
 Accept: application/json
-token: {{scott}}
+token: {{token}}
 
 ###UPDATE Authenticated User
 PUT http://localhost:8080/api/v2/u/update

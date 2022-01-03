@@ -8,6 +8,7 @@ const verifyToken = async (req, res, next) => {
     if (token) {
         jwt.verify(token, process.env.JWT_KEY, {}, (err, user) => {
             if (err) {
+                console.log('invalid token');
                 return res.status(StatusCodes.UNAUTHORIZED).json(new Error({
                     code: StatusCodes.UNAUTHORIZED,
                     message: "Invalid token. Login to get a new token"
