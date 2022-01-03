@@ -151,7 +151,41 @@ const getSavedPosts = async (req, res) => {
     res.status(snapshot.code).json(response);
 };
 
+const getFollowers = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await UserService.getFollowers(id);
+    let response;
+    if (snapshot.hasData) {
+        response = snapshot.data
+    } else {
+        response = new Error({
+            code: snapshot.code,
+            message: snapshot.error
+        });
+    }
+
+    res.status(snapshot.code).json(response);
+
+}
+
+const getFollowing = async (req, res) => {
+    const {id} = req.params;
+    const snapshot = await UserService.getFollowing(id);
+    let response;
+    if (snapshot.hasData) {
+        response = snapshot.data
+    } else {
+        response = new Error({
+            code: snapshot.code,
+            message: snapshot.error
+        });
+    }
+
+    res.status(snapshot.code).json(response);
+
+}
 
 module.exports = {
-    updateUser, getCurrentUser, getUserById, getAllUsers, followUser, unfollowUser, savePost, getSavedPosts
+    updateUser, getCurrentUser, getUserById, getAllUsers, followUser, unfollowUser, savePost, getSavedPosts,
+    getFollowers, getFollowing
 }

@@ -281,6 +281,31 @@ const notifyFollower = async (by, to) => {
     console.log('Notified')
 }
 
+const getFollowers = async (id) => {
+    try {
+        const user = await User.findById(id).populate({path: 'followers', select: '_id name profileImage pen_name'});
+        return new DocumentSnapshot({
+            code: 200,
+            data: user.followers
+        });
+    } catch (e) {
+        return new Error({message: e});
+    }
+}
+
+const getFollowing = async (id) => {
+    try {
+        const user = await User.findById(id).populate([{path: 'following', select: '_id name profileImage pen_name'}]);
+        console.log(user);
+        return new DocumentSnapshot({
+            code: 200,
+            data: user.following
+        });
+    } catch (e) {
+        return new Error({message: e});
+    }
+}
+
 module.exports = {
     findUser,
     createUser,
@@ -290,5 +315,7 @@ module.exports = {
     followUser,
     unfollowUser,
     saveContent,
-    getSavedPosts
+    getSavedPosts,
+    getFollowers,
+    getFollowing
 }

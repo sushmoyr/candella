@@ -18,7 +18,7 @@ const dispatchNotification = async ({owner, message, type, data}) => {
 const readNotification = async (id) => {
     const filter = {owner: id};
     try {
-        const notifications = await Notification.find();
+        const notifications = await Notification.find(filter);
         return new DocumentSnapshot({
             code: 200, data: notifications
         })

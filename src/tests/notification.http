@@ -1,0 +1,5 @@
+GET http://localhost:8080/api/v2/notifications
+Accept: application/json
+token: {{luo}}
+
+###

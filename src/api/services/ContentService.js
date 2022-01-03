@@ -4,6 +4,7 @@ const Review = require('../models/Review');
 const Chapter = require('../models/Chapter');
 const {StatusCodes, Notification_Types} = require("../helpers");
 const {SelectModel, Thought, Rating} = require("../models");
+const {UserService} = require("./index");
 
 const createContent = async (content) => {
     try {
@@ -435,18 +436,20 @@ const deleteRating = async (id) => {
 }
 
 /* Notification Block */
-//TODO: Check Notification Block
+
 
 const sendReviewNotification = async (review) => {
     const content = await getSingleContent({_id: review.contentId}, true, false);
     const owner = content.data.author;
+    const reviewOwnerSnapshot = await UserService.getById(review.author, true);
+    const reviewOwner = reviewOwnerSnapshot.data;
 
     if (owner._id.toString() === review.author.toString())
         return;
 
     await __dispatchNotification({
         owner: owner._id,
-        message: `${owner.name} reviewed your content ${content.data.title}`,
+        message: `${reviewOwner.name} reviewed your content ${content.data.title}`,
         type: Notification_Types.REVIEWED_BY,
         data: {
             reviewBy: {...owner},

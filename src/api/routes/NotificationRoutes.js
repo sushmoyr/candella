@@ -3,8 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const {NotificationController} = require('../controllers');
-const {verifyToken} = require("../middlewares/VerifyUser");
+const {verifyToken} = require("../middlewares");
 
-router.get('/notifications', NotificationController.getNotifications);
+router.get('/notifications', verifyToken, NotificationController.getNotifications);
 
 module.exports = router

@@ -21,4 +21,8 @@ router.post('/save/:id', verifyToken, UserController.savePost);
 
 router.get('/save', verifyToken, UserController.getSavedPosts);
 
+router.get('/followers/:id', UserController.getFollowers)
+
+router.get('/following/:id', UserController.getFollowing)
+
 module.exports = router;
