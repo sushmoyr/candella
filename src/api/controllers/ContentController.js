@@ -431,11 +431,24 @@ const featured = async (req, res) => {
 
 }
 
+const search = async (req, res) => {
+    const query = req.query['q'];
+    console.log('Searching with text: ', query);
+    const snapshot = await ContentService.search(query);
+
+    if (snapshot.hasData)
+        return res.status(snapshot.code).json(snapshot.data);
+    else return res.status(snapshot.code).json(new Error({
+        code: snapshot.code,
+        message: `Error: ${snapshot.error}`
+    }));
+}
+
 module.exports = {
     createContent, readContent, readContents, updateContent, deleteContent,
     addChapter, getChapter, getChapters, updateChapter, deleteChapter,
     addReview, getReview, getReviews, updateReview, deleteReview,
     addThought, getThought, getThoughts, updateThought, deleteThought,
     addRating, getRating, getRatings, updateRating, deleteRating,
-    featured
+    featured, search
 }

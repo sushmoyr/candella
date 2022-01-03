@@ -92,5 +92,7 @@ router.delete('/rating/:id', verifyToken, ContentController.deleteRating);
 //Feature Post
 router.get('/featured/all', ContentController.featured);
 
+//Search Post
+router.get('/search/text', ContentController.search);
 
 module.exports = router

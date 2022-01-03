@@ -556,11 +556,39 @@ const featured = async () => {
     }
 }
 
+const search = async (query) => {
+    console.log('Searching with text: ', query);
+
+    try {
+        const data = await Content.find({
+            $text: {
+                $search: query
+            }
+        }).populate(contentPopulationConfig);
+
+        if (data)
+            return createSnapshot(data);
+        else
+            return createErrorSnapshot(StatusCodes.NOT_FOUND, 'No Content Found');
+
+    } catch (e) {
+        return createErrorSnapshot(StatusCodes.BAD_REQUEST, e);
+    }
+}
+
 module.exports = {
     createContent, getSingleContent, getAllContents, updateContent, deleteContent,
     createReview, getSingleReview, getAllReviews, updateReview, deleteReview,
     createChapter, getChapter, getChapters, updateChapter, deleteChapter,
     createThought, getThought, getThoughts, updateThought, deleteThought,
     createRating, getRating, getRatings, updateRating, deleteRating,
-    featured
+    featured, search
 }
+
+/*
+$or: [
+                {title: query},
+                {description: query},
+                {tags: query},
+            ]
+ */
